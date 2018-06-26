@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>选择平台</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>	
+		
+		<style>
+			.item {
+				width: 100%;
+				height: 3.7rem;
+				background-color: white;
+			}
+			.item img {
+				width: 2.5rem;
+				height: 2.5rem;
+				float: left;
+				margin-top: 0.6rem;
+				margin-left: 0.5rem;
+				border-radius: 50%;
+			}
+			.item .name {
+				float: left;
+				height: 3.7rem;
+				line-height: 3.7rem;
+				font-size: 0.8rem;
+				font-weight: 200;
+				margin-left: 0.5rem;
+			}
+			.item .line {
+				height: 0.05rem;
+				background-color: #E2E2E2;
+				margin-left: 3.5rem;
+				width: calc(100% - 3.5rem);
+			}
+		</style>
+		
+	</head>
+	<body class="page" style="background-color: #F6F6F6;">
+		<div id="mescroll" class="content">
+			<div id="list-container">
+				<div class="item" v-for="item in daikuanList" @click="daikuanClick(item.id,item.logo,item.loanName)">
+					<img v-bind:src="item.logo" />
+					<div class="name" v-text="item.loanName"></div>
+					<div class="line"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		 var app = new Vue({
+			el: '#mescroll',
+			data: {
+				Cols: 'red !important',
+				daikuanList: [],
+			},
+			mounted: function() {
+				this.getData();
+			},
+			methods: {
+				// 列表点击事件
+				daikuanClick: function(id,logo,loanName){
+					localStorage.setItem('dkID',id);
+					localStorage.setItem('logo',logo);
+					localStorage.setItem('loanName',loanName);
+					window.location.href = 'shoudjz.html';
+				},
+				// 获取列表数据源
+				getData: function(){
+					var self = this;
+					var urlStr = Util.baseUrl + '/DuG/api/basics/loan/findLoanNameList.do';
+					var md5Str = Util.basekey;
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							key: Util.basekey,
+							auth: Util.base32Encode('key'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							// 请求成功
+							if (res.ret_code == '0') {
+								self.daikuanList = res.ret_data;
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					})
+				},
+			}
+		})
+	</script>
+</html>

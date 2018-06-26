@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>帮助中心</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<link rel="stylesheet" href="../css/info.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>		
+		<style>
+			.help {
+				width: 100%;
+				background-color: white;
+			}
+			.help_title {
+				height: 2.5rem;
+				line-height: 2.5rem;
+				padding-left: 0.5rem;
+				font-size: 0.8rem;
+				color: #1C5CFF;
+				background-color: #F5F5F5;
+			}
+			.help_list_title {
+				line-height: 2.5rem;
+				font-size: 0.8rem;
+				color: #5F5F5F;
+				background-color: white;
+				padding: 0 0.5rem;
+				/*width: calc(100% - 1rem);*/
+			}
+			.help_list_content {
+				font-size: 0.8rem;
+				color: #000000;
+				padding: 0.5rem 0.5rem;
+				background-color: #F6F6F6;
+			}
+			.line {
+				height: 0.05rem;
+				background-color: #E6E6E6;
+				margin-left: 0.5rem;
+			}
+		</style>
+	</head>
+	<body class="page" style="background-color: #F6F6F6;">
+		<div id="mescroll" class="contentd">
+			<div class="help" v-for="(help,index) in dataList">
+				<div class="help_title" v-html="help.title"></div>
+				<div class="help_list" v-for="(item,ind) in help.items">
+					<div @click="itemClick(index,ind)" class="help_list_title" v-html="item.title"></div>
+					<div class="line"></div>
+					<div v-if="item.isShow" class="help_list_content" v-html="item.detail"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		 var app = new Vue({
+			el: '#mescroll',
+			data: {
+				dataList: [
+					{
+						title: '一、贷款申请问题',
+						items: [
+							{
+								title: 'Q1.贷款产品信息',
+								isShow: false,
+								detail: '如果您在申请贷款产品中遇到问题，您可查看贷款攻略，请点击-攻略大全<br />如果您对贷款流程有疑问，请查看详细操作，请点击-操作流程图'
+							},
+							{
+								title: 'Q2.运营商认证',
+								isShow: false,
+								detail: '1.如果提示姓名不符，请您联系您申请使用的手机号运营商进行手机号实名认证，且实名认证姓名要和申请贷款时在基本信息里填写的姓名一致。<br />'
+									   +'2.如果您忘记服务密码。请拨打手机运营商客服电话找回密码。<br />'
+									   +'3.如果您无法提供运营商服务密码，您可申请融360、好贷等产品。'
+							},
+							{
+								title: 'Q3.芝麻信用认证',
+								isShow: false,
+								detail: '芝麻信用认证要求您绑定本人支付宝账号，授权芝麻信用分。<br />'
+									   +'1.如果您支付宝账号不存在，请确认支付宝姓名和基本信息中填写的一致，身份证号码为您本人身份证号码，然后重试。<br />'
+									   +'2.如果您提示密码错误。请注意填写支付宝登录密码而非支付密码，若您忘记密码，请联系支付宝客服找回。<br />'
+									   +'3.如果提示资质不符。则是您的芝麻信用认证资料不符合产品要求，请尝试申请不需要芝麻信用的产品，例如现金借款、平安惠普'
+							},
+							{
+								title: 'Q4.邮箱认证',
+								isShow: false,
+								detail: '1.如果您没有邮箱，建议您可以使用qq邮箱尝试（例如713456789@QQ.COM）,或者尝试申请其他不需要填写邮箱的产品，例如现金借款、简单贷。<br />'
+									   +'2.如果授权失败，有可能是您的邮箱处于停用状态，或者由于您邮箱内无信用卡账单，或者信用卡非本人。请转换用接收本人信用卡账单的邮箱，并清理邮箱内的垃圾邮件。'
+							},
+							{
+								title: 'Q5.填写联系人',
+								isShow: false,
+								detail: '1.如果无法识别联系人，建议您填写近三个月内常用联系且信用良好的亲友。<br />'
+									   +'2.如果联系人页面空白、不全、一直在加载、无法添加，请您在“设置”或者手机管理软件内授权，然后重试。<br />'
+									   +'3.如果您填写的联系人较随意，手机号不真实，系统将无法识别，请认真填写。'
+							},
+							{
+								title: 'Q6.绑定银行卡',
+								isShow: false,
+								detail: '【绑卡要求】您填写的姓名、身份证、手机号码和您所填写的银行卡号都属于您本人才可以成功，请联系银行卡开户行确认这些信息后，重试。<br />'
+									   +'【银行不支持】由于您目前绑定的银行卡是贷款机构不支持的银行，建议您使用常用的银行卡绑定（例如：中国银行、工商银行、建设银行、农业银行等等）<br />'
+									   +'【银卡失败】如果您不记得银行预留手机号建议您去银行及时更新手机号'
+							},
+							{
+								title: 'Q7.验证码收不到',
+								isShow: false,
+								detail: '如果您在2分钟内没收到验证码，请您输入产品名称，借小妹尽快帮您处理。或者您可申请其他产品试试哦~'
+							},
+							{
+								title: 'Q8.邀请码',
+								isShow: false,
+								detail: '邀请码是选填的，没有则无须填（请留意填写密码的位数、大小写字母要求）。'
+							},
+						]
+					},
+					{
+						title: '二、贷款审核问题',
+						items: [
+							{
+								title: 'Q1.资讯审核进度',
+								isShow: false,
+								detail: '1.请在“我的申请”,点击已申请的产品，登录后即可查询产品申请状态。<br />'
+									   +'2.正常情况下，小额急速产品最快2小时可出审批结果，大额产品最快当天可查看审批结果'
+							},
+							{
+								title: 'Q2.资讯审批不通过原因',
+								isShow: false,
+								detail: '您的审核结果是由系统综合您的资质评定的，未通过是因为您的资质未满足产品需求。不同产品审核条件是不一样的，您可申请多款以满足您资金的需求。'
+							},
+							{
+								title: 'Q3.审核通过，等待放款中',
+								isShow: false,
+								detail: '1.如您已提现，等待放款，通常情况下当天可到账，具体转账时间以银行为准（如遇节假日转账可能出现延迟情况）。<br />'
+									   +'2.如遇银行卡绑定不成功，请查看攻略详情活拨打相关产品的客服电话进行咨询。请点击-机构常见问题。'
+							},
+							{
+								title: 'Q4.已放款，正在还款/结清/逾期',
+								isShow: false,
+								detail: '1.【无法还款】如已经进行还款操作，系统未显示，有可能是系统显示延误，可在24小时之后再进行查看，如有疑问可拨打相关产品客服咨询<br />'
+									   +'2.【提前还款】部分贷款机构是不支持提前还款的，您可查看贷款攻略或拨打相关客服咨询。<br />'
+									   +'3.【逾期还款】部分贷款机构是需要收取相关费用的，您可查看攻略或拨打相关客服电话进行咨询，请点击-机构常见问题'
+							}
+						]
+					},
+//					{
+//						title: '三、信用卡申请问题',
+//						items: [
+//							{
+//								title: 'Q1.信用卡申请',
+//								isShow: false,
+//								detail: '1.办理信用卡，在信用卡专区选择您需要办理的信用卡，填写基本资料，提交完成后会有银行专员联系您，即可极速办理。'
+//							},
+//							{
+//								title: 'Q2.申请进度查询',
+//								isShow: false,
+//								detail: '查询信用卡申请进度，在我的申请页面进入信用卡进度查询页面，直接选择您申请的银行卡进行查询即可。点击-款速入口。'
+//							},
+//							{
+//								title: 'Q3.信用卡额度',
+//								isShow: false,
+//								detail: '批卡额度是 银行根据申请人填写的个人信息所给出的，具体和学历、居住情况、工作情况，工资情况都有关系，每家银行的批卡额度也有所不同，但只要您保持良好用卡习惯，银行会为您逐步提高固定额度。'
+//							}
+//						]
+//					}
+				]
+			},
+			mounted: function() {
+
+			},
+			methods: {
+				// 问题点击事件
+				itemClick: function(fid,sid){
+					var f_len = this.dataList.length;
+					for (var i = 0; i < f_len; i ++) {
+						var f_items = this.dataList[i].items;
+						var s_len = f_items.length;
+						for (var j = 0; j < s_len; j ++) {
+							if (i == fid && j == sid) {
+								this.dataList[i].items[j].isShow = !this.dataList[i].items[j].isShow;
+							} else{
+								this.dataList[i].items[j].isShow = false;
+							}
+						}
+					}
+				},
+			}
+		})
+	</script>
+</html>

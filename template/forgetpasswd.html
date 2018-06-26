@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>忘记密码</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/login.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+	</head>
+	<body class="page" style="background-color: white;">
+		<div id="app">
+			<!-- 贷 字 -->
+			<div class="logo" style="margin-top: 5.35rem;">
+				<img src="../img/dai.png" />
+			</div>
+			<!-- 快捷登录输入框 -->
+			<div style="margin-top: 3rem"> 
+				<div class="login_input">
+					<input v-model="telVal" type="tel" placeholder="请输入手机号" maxlength="11" />
+					<div @click="telVal = ''" v-if="showTelClear" class="clear" style="right: 0;"></div>
+				</div>
+				<div class="login_input">
+					<input style="width: 7.5rem;" v-model="yzmVal" type="tel" placeholder="请输入短信验证码" maxlength="4" />
+					<div @click="yzmVal = ''" v-if="showYzmClear" class="clear" style="right: 4.5rem;"></div>
+					<div @click="sendYzmClick" class="timer" v-bind:style="{color: yzmColor}" v-text="yzmTime2"></div>
+				</div>
+				<div class="login_input">
+					<input style="width: 7.5rem;" v-model="passwd" type="text" placeholder="请输入6~22位密码" />
+				</div>
+			</div>
+			<!-- 登录按钮 -->
+			<div @click="loginClick" v-bind:class="loginClass">登录</div>
+			<!-- 语音验证码 -->
+			<!--<div class="login_yuyin">没收到短信？试试<span @click="yuyinClick" style="color: #1184FF;">电话语音验证码</span></div>-->
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				show_hide: 'clear hide_pw',
+				pwType: 'password',
+				// 用户输入的手机号
+				telVal: '',
+				// 验证码
+				yzmVal: '',
+				// 新密码
+				passwd: '',
+				// 显示手机号删除按钮
+				showTelClear: false,
+				// 显示验证码删除按钮
+				showYzmClear: false,
+				// 验证码计时
+				yzmTime: '发送验证码',
+				yzmTime2: '发送验证码',
+				// 登录按钮样式
+				loginClass: 'login_btn',
+				yzmColor: '#1184FF',
+			},
+			watch: {
+				// 手机号值改变事件
+				telVal: function(val,oldVal){
+					if (val.length ==0) {
+						this.showTelClear = false;
+					} else{
+						this.showTelClear = true;
+					}
+					this.isActive();
+				},
+				// 验证码值改变事件
+				yzmVal: function(val,oldVal){
+					if (val.length ==0) {
+						this.showYzmClear = false;
+					} else{
+						this.showYzmClear = true;
+					}
+					this.isActive();
+				},
+				// 密码值改变事件
+				passwd: function(val,oldVal){
+					if (val.length ==0) {
+						this.showYzmClear = false;
+					} else{
+						this.showYzmClear = true;
+					}
+					this.isActive();
+				},
+			},
+			created: function(){
+//				$.init();	
+			},
+			methods: {
+				// 显示 还是隐藏密码
+				showPwClick: function(){
+					// 显示密码
+					if (this.show_hide == 'clear hide_pw') {
+						this.show_hide = 'clear show_pw';
+						this.pwType = 'text';
+					} else{ // 隐藏密码
+						this.show_hide = 'clear hide_pw';
+						this.pwType = 'password';
+					}
+				},
+				// 发送验证码 按钮点击事件
+				sendYzmClick: function(){
+					var self = this;
+					if (self.yzmTime != '发送验证码') {
+						return;
+					}
+					if (Util.checkPhone(this.telVal)) {
+						var urlStr = Util.baseUrl + '/DuG/api/basics/validateCode/findValidateCode.do';
+						var md5Str = Util.basekey + this.telVal + '3';
+						$.ajax({
+							type:"get",
+							url: urlStr,
+							async:true,
+							data: {
+								phone: this.telVal,
+								sourceType: 3,
+								key: Util.basekey,
+								auth: Util.base32Encode('key,phone,sourceType'),
+								token: md5(md5Str)
+							},
+							success: function(res){
+								var res = JSON.parse(res);
+								// 发送成功
+								if (res.ret_code == '0') {
+									$.toast("验证码发送成功");
+									self.yzmTime = 60;
+								    var timer = setInterval(function(){
+										self.yzmTime =  self.yzmTime - 1;
+										self.yzmTime2 = self.yzmTime + '(s)'
+										self.yzmColor = '#7A7A7A';
+										if (self.yzmTime == 0) {
+											clearInterval(timer);
+											self.yzmTime = '发送验证码';
+											self.yzmTime2 = '发送验证码';
+											self.yzmColor = '#1184FF"';
+										}
+									},1000);
+								} else{
+									$.toast(res.ret_msg);
+								}
+							},
+							error: function(res){
+								
+							}
+						});
+					} else{
+						$.toast("手机号输入有误");
+					}
+				},
+				// 登录按钮点击事件
+				loginClick: function(){
+					if (this.isActive() == true) {
+						var urlStr = Util.baseUrl + '/DuG/api/user/user/modifyPassword.do';
+						var md5Str = Util.basekey + this.telVal + '1' + md5(this.passwd) + this.yzmVal;
+						$.ajax({
+							type:"get",
+							url: urlStr,
+							async:true,
+							data: {
+								phone: this.telVal,
+								passWord: md5(this.passwd),
+								validateCode: this.yzmVal,
+								sourceType: 1,
+								key: Util.basekey,
+								auth: Util.base32Encode('key,phone,sourceType,passWord,validateCode'),
+								token: md5(md5Str)
+							},
+							success: function(res){
+								var res = JSON.parse(res);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+								// 修改成功成功
+								if (res.ret_code == '0') {
+									$.toast('修改成功');
+									localStorage.setItem('userId',res.ret_data.userId || '');
+									localStorage.setItem('userPhone',res.ret_data.userPhone || '');
+									window.location.replace('wode.html');
+								} else{
+									$.toast(res.ret_msg);
+								}
+							},
+							error: function(res){
+								$.toast('网路请求失败，请稍后重试');
+							}
+						});
+					}
+				},
+				// 语音验证码点击事件
+				yuyinClick: function(){
+					
+				},
+				// 是否激活登录按钮
+				isActive: function(){
+					if (this.telVal.length == 11 && this.yzmVal.length > 0 && this.passwd.length > 0) {
+						this.loginClass = 'login_btn_active';
+						return true;
+					} else{
+						this.loginClass = 'login_btn';
+						return false;
+					}	
+				},
+			},
+		})
+	</script>
+</html>

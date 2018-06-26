@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>产品详情</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<link rel="stylesheet" href="../css/daikuan.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		
+		<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+		<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
+		
+	</head>
+	<body class="page" style="background-color: white;">
+		<div id="app" class="content">
+			<!-- 贷款详情 头部 -->
+			<div class="detail_header">
+				<img class="detail_logo" v-bind:src="detailData.logo" />
+				<div class="detail_right">
+					<div class="detail_title" v-text="detailData.loanName"></div>
+					<div class="detail_tip" v-text="detailData.introduce"></div>
+					<div class="detail_badge">
+						<span v-for="item in keyword" v-if="item != ''" class="badge">{{item}}</span>
+					</div>
+				</div>
+			</div>
+			<!-- 贷款费用计算 -->
+			<div class="detail_fei">
+				<div class="fei_item">
+					<div class="fei_item_top">{{detailData.monthRate}}<span>%</span></div>
+					<div class="fei_item_bottom">参考利率</div>
+				</div>
+				<div class="fei_item">
+					<div class="fei_item_top" v-text="mouthMoney"></div>
+					<div class="fei_item_bottom">月还款(元)</div>
+				</div>
+				<div class="fei_item">
+					<div class="fei_item_top" v-text="totalMoney"></div>
+					<div class="fei_item_bottom">总利息(元)</div>
+				</div>
+				<div class="fei_line"></div>
+			</div>
+			<!-- 贷款金额 -->
+			<div class="detail_num">
+				<div class="detail_money">
+					<div class="num_title">金额:</div>
+					<div class="money_input">
+						<input v-model="inputMoney" v-bind:placeholder="detailData.maxQuota" />
+						<span>元</span>
+					</div>
+				</div>
+				<div class="detail_money">
+					<div class="num_title">期限:</div>
+					<div @click="qixianClick" class="money_input">
+						<span v-text="qishiLabel" style="margin-left: 0.3rem;"></span>
+					</div>
+				</div>
+			</div>
+			<!-- 申请条件 -->
+			<div class="detail_tiaojian">
+				<div class="tiaojian_title">申请条件</div>
+				<div class="tiaojian_item" v-for="item in detailData.applyCondition" v-text="item"></div>
+				<!--<div class="tiaojian_item">02.本人需要正在使用信用卡</div>
+				<div class="tiaojian_item">03.本人需要实名认证的淘宝（支付宝）账号</div>
+				<div class="tiaojian_item">04.本人需要实名认证的手机号</div>-->
+			</div>
+			<!-- 认证材料 -->
+			<div class="detail_renzheng">
+				<div class="tiaojian_title">认证材料</div>
+				<div v-for="item in detailData.certifiedList" class="renzheng_item">
+					<img v-lazy="item.loan_values" />
+					<div>{{item.loan_key}}</div>
+				</div>
+			</div>
+			<!-- 申请流程 -->
+			<div class="detail_renzheng" style="margin-bottom: 4rem;">
+				<div class="tiaojian_title">申请流程</div>
+				<div class="renzheng_item">
+					<img src="../img/sfrz2.png" />
+					<div>身份认证</div>
+				</div>
+				<div class="renzheng_item">
+					<img src="../img/lxrrz.png" />
+					<div>联系人认证</div>
+				</div>
+				<div class="renzheng_item">
+					<img src="../img/yysrz.png" />
+					<div>运营商认证</div>
+				</div>
+				<div class="renzheng_item">
+					<img src="../img/xyk2.png" />
+					<div>信用卡授权</div>
+				</div>
+			</div>
+			<!-- 立即申请 -->
+			<div class="detail_shenqi">
+				<div class="shenqin_btn" @click="lijiApply">立即申请</div>
+				<div v-bind:class="shoucClass" data-id="1" @click="addCollectionClick">️</div>
+			</div>
+		</div>
+	</body>
+	<script src="https://unpkg.com/vue-lazyload/vue-lazyload.js"></script>
+	<script>
+		Vue.use(VueLazyload,{
+			preLoad: 1.3,
+			error: '../img/dai.png',
+			loading: '../img/loading.gif',
+			attempt: 3
+		})
+		var app = new Vue({
+			el: '#app',
+			data: {
+				detailData: {},
+				shoucClass: 'shenqin_sc',
+				// 输入的金额
+				inputMoney: '',
+				// 每月还款金额
+				mouthMoney: '',
+				// 总利息
+				totalMoney: '',
+				// 总期数
+				totalQishu: 1,
+				qishiLabel: '1个月',
+				keyword: [],  // 关键字
+			},
+			mounted: function() {
+				this.getData();
+			},
+			watch:{
+　　　　　　　　 inputMoney(curVal,oldVal){
+					this.changeData();
+　　　　　　　　 },
+			},
+			methods: {
+				// 立即申请 点击事件
+				lijiApply: function(){
+					var self = this;
+					var urlStr = Util.baseUrl + '/DuG/api/basics/loan/createLoanApply.do';
+					var id = Util.getUrlKey(id);
+					var userId = localStorage.getItem('userId') || '';
+					var md5Str = Util.basekey + userId + id;
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							userId: userId,
+							id: id,
+							key: Util.basekey,
+							auth: Util.base32Encode('key,userId,id'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							// 请求成功
+							if (res.ret_code == '0') {
+								window.location.href = self.detailData.loanUrl;
+//								window.location.href = 'https://www.baidu.com';
+								
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					})
+				},
+				// 期限
+				qixianClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '1个月',
+						    value: 1,
+						},
+						{
+						    label: '3个月',
+						    value: 3,
+						},
+						{
+						    label: '6个月',
+						    value: 6,
+						},
+						{
+						    label: '12个月',
+						    value: 12,
+						},
+						{
+						    label: '24个月',
+						    value: 24,
+						},
+						{
+						    label: '36个月',
+						    value: 36,
+						}],{
+					   onConfirm: function (result) {
+					       self.totalQishu = result[0].value;
+						   self.qishiLabel = result[0].label;
+						   self.changeData();
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 计算贷款利率
+				changeData: function(){
+					
+					var self = this;
+					// [贷款本金×月利率×(1+月利率)^还款月数]/[(1+月利率)^还款月数-1]
+					var benjin = self.inputMoney;  // 本金
+					
+					if (self.inputMoney == '') {
+						benjin = self.detailData.maxQuota;
+					} 
+
+					var yuelilv = (self.detailData.monthRate * 100) / 10000; // 月利率
+					var yuelilv2 = yuelilv + 1; // 月利率 + 1
+					var huankuanyueshu = self.totalQishu;  // 还款月数
+					
+					var fenzi1 = benjin * yuelilv;
+					var fenzi2 = Math.pow(yuelilv2,huankuanyueshu);
+					var fenzi3 = fenzi1 * fenzi2;
+					
+					var fenmu = Math.pow(yuelilv2,huankuanyueshu) - 1;
+					
+					self.mouthMoney = fenzi3 / fenmu ;
+					self.totalMoney = self.mouthMoney * huankuanyueshu - benjin;
+					
+					self.mouthMoney = self.mouthMoney.toFixed(2);
+					self.totalMoney = self.totalMoney.toFixed(2);
+				},
+				// 收藏 按钮点击事件
+				addCollectionClick: function(e){
+					var dataID = e.target.dataset.id;
+					var self = this;
+					// 添加收藏
+					var urlStr1 = Util.baseUrl + '/DuG/api/basics/loan/createLoanCollection.do';
+					// 取消收藏
+					var urlStr2 = Util.baseUrl + '/DuG/api/basics/loan/removeLoanCollection.do';
+					var id = Util.getUrlKey(id);
+					var userId = localStorage.getItem('userId') || '';
+					
+					if (userId == '') {
+						weui.confirm('您还未登录喔~', {
+						    title: '提示',
+						    buttons: [{
+						        label: '取消',
+						        type: 'default',
+						        onClick: function(){ 
+						        		
+						        }
+						    }, {
+						        label: '去登录',
+						        type: 'primary',
+						        onClick: function(){ 
+						        		window.location.href = 'login.html';
+						        }
+						    }]
+						});
+						return;
+					}
+					
+					
+					
+					var md5Str = Util.basekey + userId + id;
+					var urlStr = '';
+					var msg = '';
+					// 收藏
+					if (dataID == 1) {
+						urlStr = urlStr1;
+						msg = '收藏成功';
+					} else{ // 取消收藏
+						urlStr = urlStr2;
+						msg = '取消成功';
+					}
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							userId: userId,
+							id: id,
+							key: Util.basekey,
+							auth: Util.base32Encode('key,userId,id'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							// 请求成功
+							if (res.ret_code == '0') {
+								if (dataID == 1) { // 收藏成功
+									self.shoucClass = 'shenqin_sc2';
+								} else{
+									self.shoucClass = 'shenqin_sc';
+								}
+								$.toast(msg);
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					})
+				},
+				// 获取列表数据源
+				getData: function(){
+					var self = this;
+					var urlStr = Util.baseUrl + '/DuG/api/basics/loan/findLoanModel.do';
+					var id = Util.getUrlKey(id);
+					var userId = localStorage.getItem('userId') || '';
+					var md5Str = Util.basekey + userId + id;
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							userId: userId,
+							id: id,
+							key: Util.basekey,
+							auth: Util.base32Encode('key,userId,id'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							// 请求成功
+							if (res.ret_code == '0') {
+								self.detailData = res.ret_data;
+								self.detailData.applyCondition = self.detailData.applyCondition.split('|~|\n');
+								self.keyword = self.detailData.keyword.split('|');
+								self.changeData();
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					})
+				},
+			}
+		})
+	</script>
+</html>

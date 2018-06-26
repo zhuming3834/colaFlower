@@ -1,0 +1,189 @@
+#swiper1 {
+	height: 9.4rem;
+	width: 100%;
+	padding-bottom: 0 !important;
+}
+.swiper-slide img{
+	width: 100%;
+	height: 100%;
+}
+.swiper-pagination-bullet {
+	background-color: white !important;
+	width: .3rem !important;
+	height: .3rem !important;
+}
+.swiper-pagination-bullet-active {
+	background-color: #FF4040 !important;
+}
+.message {
+	width: 100%;
+	height: 1.2rem;
+	background-color: white;
+	margin-bottom: 0.05rem;
+}
+.laba {
+	float: left;
+	width: 1rem;
+	height: 1rem;
+	background-image: url(../img/laba.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 0.7rem 0.7rem;
+	margin-right: 0.4rem;
+	margin-left: 0.4rem;
+	margin-top: 0.1rem;
+}
+#swiper2 {
+	float: left;
+	height: 1rem !important;
+	width: calc(100% - 2.4rem);
+	padding-bottom: 0 !important;
+	font-size: 0.65rem;
+	color: #5B5B5B;
+	margin-top: 0.1rem;
+}
+#swiper2 .swiper-wrapper{
+	height: 1rem;
+}
+.div_title {
+	background-color: white;
+	padding-left: 0.5rem;
+}
+.classify {
+	width: 100%;
+	height: 6.5rem;
+	background-color: white;
+	margin-bottom: 0.2rem;
+}
+.classify_item {
+	height: 3.25rem;
+	float: left;
+	text-align: left;
+	width: 50%;
+}
+.classify_left {
+	margin-left: 1rem;
+	margin-top: 0.45rem;
+	float: left;
+}
+.classify_left img {
+	width: 2.3rem;
+	height: 2.3rem;
+}
+.classify_right {
+	margin-left: 0.2rem;
+	float: left;
+	margin-top: 0.45rem;
+	width: 4rem;
+}
+.classify_right div{
+	text-overflow:ellipsis;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	-webkit-line-clamp: 1; 
+  	overflow: hidden;
+  	font-weight: 160;
+}
+.classify_title {
+	width: 100%;
+	font-size: 0.8rem;
+	color: #000000;
+}
+.classify_tip {
+	width: 100%;
+	font-size: 0.65rem;
+	color: #828282;
+}
+.classify2 {
+	height: 4rem;
+	margin: 0.2rem 0;
+	background-color: white;
+	overflow-x: scroll;
+	white-space: nowrap;
+}
+.classify_item2 {
+	width: 5.95rem;
+	height: 3.6rem;
+	margin: 0.2rem 0.2rem;
+	display: inline-block;
+	position: relative;
+}
+.classify2_top {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0.7rem;
+	height: 0.7rem;
+	background-image: url(../img/huo.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.classify2_title {
+	margin: 0.8rem 0.65rem 0;
+	text-align: left;
+	font-size: 0.7rem;
+	text-overflow:ellipsis;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	-webkit-line-clamp: 1; 
+  	overflow: hidden;
+}
+.classify2_tip {
+	margin: 0 0.65rem;
+	text-align: left;
+	font-size: 0.6rem;
+	font-weight: 100;
+	text-overflow:ellipsis;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	-webkit-line-clamp: 1; 
+  	overflow: hidden;
+}
+.hot {
+	background-color: white;
+	width: 100%;
+	margin-top: 0.2rem;
+}
+.hot_title {
+	width: 100%;
+	height: 1.6rem;
+	line-height: 1.6rem;
+}
+.hot_title img {
+	width: 0.5rem;
+	height: 0.6rem;
+	margin-left: 0.5rem;
+}
+.hot_title span {
+	font-size: 0.65rem;
+	color: #000000;
+	font-weight: 200;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

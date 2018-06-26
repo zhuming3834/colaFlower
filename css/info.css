@@ -1,0 +1,85 @@
+input::-webkit-input-placeholder{
+    color:#9a9a9a;
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:#9a9a9a;
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:#9a9a9a;
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:#9a9a9a;
+}
+
+.info_title {
+	height: 1.4rem;
+	margin-left: 0.6rem;
+	background-color: #f6f6f6;
+	line-height: 1.4rem;
+	color: #7e7e7e;
+	font-size: 0.7rem;
+}
+.line {
+	width: 100%;
+	background-color: white;
+	border-bottom: solid 0.05rem #f6f6f6;
+	height: 2.4rem;
+	font-weight: 200;
+}
+.line_title {
+	height: 2.4rem;
+	line-height: 2.4rem;
+	text-align: left;
+	color: #000000;
+	font-size: 0.8rem;
+	float: left;
+	margin-left: 0.5rem;
+}
+.line_input {
+	float: right;
+	margin-right: 0.5rem;
+	margin-top: 0.6rem;
+	text-align: right;
+	height: 1.2rem;
+	line-height: 1.2rem;
+	border: none;
+	outline: none;
+}
+.line_select {
+	height: 2.4rem;
+	line-height: 2.4rem;
+	text-align: right;
+	color:#9a9a9a;
+	font-size: 0.8rem;
+	float: right;
+	margin-right: 0.5rem;
+}
+.line_select_active {
+	height: 2.4rem;
+	line-height: 2.4rem;
+	text-align: right;
+	color: #000000;
+	font-size: 0.8rem;
+	float: right;
+	margin-right: 0.5rem;
+}
+.icon-right {
+	margin-left: 0.3rem;
+	color:#9a9a9a !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

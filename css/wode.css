@@ -1,0 +1,139 @@
+.user_info {
+	width: 100%;
+	height: 10.3rem;
+	background-color: white;
+	position: relative;
+}
+.user_info .bg_img {
+	width: 100%;
+	height: 100%;
+}
+.info {
+	position: absolute;
+	top: 2rem;
+	left: 1.1rem;
+	right: 0;
+	bottom: 0;
+}
+.info_img {
+	width: 3.7rem;
+	height: 3.7rem;
+	border: solid 0.15rem rgb(255,167,148);
+	border-radius: 50%;
+}
+.info_name {
+	position: absolute;
+	left: 4.3rem;
+	top: 0.8rem;
+	font-size: 0.8rem;
+	color: white;
+	font-weight: 200;
+}
+.info_tel {
+	position: absolute;
+	left: 4.3rem;
+	top: 2rem;
+	font-size: 0.8rem;
+	color: white;
+	font-weight: 200;
+}
+.info_ok {
+	position: absolute;
+	right: 2rem;
+	top: 1.5rem;
+	font-size: 0.7rem;
+	color: #ff3333;
+	font-weight: 200;
+	padding: 0.1rem 0.4rem;
+	background-color: rgba(255,255,255,0.50);
+	border-radius: 0.75rem;
+}
+.info span {
+	position: absolute;
+	right: 1rem;
+	top: 1.6rem;
+	color: white;
+	font-weight: bold;
+}
+.line {
+	width: 100%;
+	height: 3rem;
+}
+.line img {
+	float: left;
+	margin-left: 1rem;
+	width: 2.2rem;
+	height: 2.2rem;
+	margin-top: 0.4rem;
+	margin-right: 0.2rem;
+}
+.line_title {
+	float: left;
+	color: #272727;
+	font-size: 0.8rem;
+	font-weight: 200;
+	height: 2.95rem;
+	line-height: 2.95rem;
+	border-bottom: solid 0.05rem #F6F6F6;
+	width: calc(100% - 4rem);
+	
+}
+.badge {
+	background-color: #FF0000;
+	color: white;
+	font-size: 0.6rem;
+	margin-left: 0.3rem;
+	padding: 0.1rem 0.4rem;
+	font-weight: normal;
+}
+
+.last_one {
+	margin-bottom: 6rem;
+}
+.popup-about{
+	background-color: rgba(0,0,0,0.4);
+}
+.content-block {
+	width: 13.5rem;
+	height: 12.6rem;
+	background-color: white;
+	border-radius: 0.6rem;
+	margin: 40% auto;
+	text-align: center;
+	padding: 0;
+}
+.popup_title {
+	height: 2.5rem;
+	line-height: 2.5rem;
+	font-size: 0.85rem;
+	color: #030303;
+}
+.content-block img{
+	width: 8.9rem;
+	height: 7.2rem;
+}
+.popup_btn {
+	width: 100%;
+	border-top: solid 0.005rem #c1c1c1;
+	height: 2.5rem;
+	line-height: 2.5rem;
+}
+.login_out {
+	background: #FF5201;
+	box-shadow: 0 0.3rem 0.5px 0 #FFBB9C;
+	border-radius: 1rem;
+	width: 15rem;
+	height: 2rem;
+	line-height: 2rem;
+	color: white;
+	font-size: 0.8rem;
+	text-align: center;
+	position: fixed;
+	bottom: 5rem;
+	left: calc(50% - 7.5rem);
+}
+
+
+
+
+

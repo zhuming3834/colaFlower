@@ -1,0 +1,21 @@
+.bar-tab .tab-item.active, .bar-tab .tab-item:active {
+    color: #FF400A !important;
+}
+.bar-tab .tab-item{
+	color: #767676 !important;
+}
+.page {
+	background-color: #ECECEC;
+}
+input::-webkit-input-placeholder{
+    color:#9a9a9a;
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:#9a9a9a;
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:#9a9a9a;
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:#9a9a9a;
+}

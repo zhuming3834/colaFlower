@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>意见反馈</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<link rel="stylesheet" href="../css/wode.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<style>
+			textarea {
+				border: solid 0.05rem transparent;
+				outline: none;
+				width: 94%;
+				height: 10rem;
+				margin-top: 1rem;
+				margin-left: 3%;
+				border-radius: 0.3rem;
+				padding: 0.2rem;
+				font-size: 0.7rem;
+			}
+			.zishu {
+				float: right;
+				margin-right: 3%;
+				font-size: 0.5rem;
+			}
+			.content {
+				background-color: white;
+			}
+		</style>
+	</head>
+	<body class="page" style="background-color: #F6F6F6;">
+		<div id="app" style="background-color: white; height: 13rem;">
+			<textarea v-model="content" placeholder="主人，请您留下宝贵意见，我们一定会拼命更好的向您服务~~" maxlength="100"></textarea>
+			<span class="zishu">还可以输入{{zishu}}字</span>
+		</div>
+		<div @click="saveClick" class="login_out">保存</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				userId: '',
+				content: '',
+				zishu: '100', // 输入的字数
+			},
+			watch: {
+				// 快捷登录   账号密码登录  切换
+				content: function(val,oldVal){
+					this.zishu = 100 - val.length;
+					if (this.zishu <= 0) {
+						$.toast('已经达到最大字数限制');
+					} 
+				},
+			},
+			methods: {
+				// 保存  点击事件
+				saveClick: function(){
+					var self = this;
+					var urlStr = Util.baseUrl + '/DuG/api/basics/message/saveFeedbackModel.do';
+					var userId = localStorage.getItem('userId') || '';	
+					var content = this.content;
+					var md5Str = Util.basekey + userId + content;
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							userId:	userId,	  // 用户ID
+							content: content, // 内容
+							key: Util.basekey,
+							auth: Util.base32Encode('key,userId,content'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							if (res.ret_code == 0) {
+								$.toast('提交成功!谢谢反馈!');
+								setTimeout(function(){
+									window.location.href = document.referrer;
+								},2000);
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					});
+				},
+			},
+		})
+	</script>
+</html>

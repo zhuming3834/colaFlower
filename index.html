@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>启动页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/sm.css">
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<style>
+			img {
+				width: 100%;
+				height: 100%;
+			}
+			#time {
+				position: absolute;
+				right: 1rem;
+				top: 1rem;
+				background-color: rgba(0,0,0,0.2);
+				width: 3rem;
+				height: 1.6rem;
+				line-height: 1.6rem;
+				border-radius: 0.8rem;
+				z-index: 100;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body class="page">
+		<img src="img/u30.png" />
+		<div id="time">3s</div>
+	</body>
+	<script type="text/javascript" src="js/util.js" ></script>
+	<script>
+		window.onload = function(){
+			var isEnter = localStorage.getItem('isEnter') || '';
+			if (isEnter == 1) {
+				window.location = 'template/login.html';
+			} else{
+				var i = 3;
+				var interval = setInterval(function(){
+					$('#time').text(i + 's');
+					i --;
+					if (i == -1) {
+						localStorage.setItem('isEnter','1');
+						window.location = 'template/login.html';
+						i = 3;
+					}
+					
+				},1000);
+			}
+		}
+		
+	</script>
+</html>

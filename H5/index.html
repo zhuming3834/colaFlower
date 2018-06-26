@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>嘟克贷款</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>		
+		<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+		<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
+		
+		
+		<style>
+			.page_bg {
+				z-index: 1;
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 0;
+				width: 100%;
+				height: 48rem;
+			}
+			.input_area {
+				z-index: 200;
+				width: 90%;
+				margin: 0 5% 1rem;
+				text-align: center;
+				position: absolute;
+				top: 20rem;
+				right: 0;
+				left: 0;
+			}
+			.input_line {
+				width: 100%;
+				height: 2.2rem;
+				background-color: white;
+				border-radius: 1.1rem;
+				margin: 0.75rem 0;
+			}
+			.long {
+				height: 2.2rem;
+				line-height: 2.2rem;
+				font-weight: 200;
+				margin-left: 1rem;
+				width: calc(100% - 2rem);
+			}
+			.long2 {
+				height: 2.2rem;
+				line-height: 2.2rem;
+				font-weight: 200;
+				margin-left: 1rem;
+				width: calc(100% - 6.2rem);
+			}
+			.yzm_btn {
+				float: right;
+				width: 5rem;
+				height: 2.2rem;
+				line-height: 2.2rem;
+				background-color: rgb(254,220,50);
+				border-top-right-radius: 1.1rem;
+				border-bottom-right-radius: 1.1rem;
+				color: #756602;
+			}
+			.yzm_btn_dis {
+				float: right;
+				width: 5rem;
+				height: 2.2rem;
+				line-height: 2.2rem;
+				background-color: #C4C4C4;
+				border-top-right-radius: 1.1rem;
+				border-bottom-right-radius: 1.1rem;
+				color: #756602;
+			}
+			input {
+				background-color: transparent;
+				border: none;
+				outline: none;
+			}
+			.btn{
+				text-align: center;
+				height: 2.2rem;
+				line-height: 2.2rem;
+				text-align: center;
+				background-color: #a800ff;
+				border-radius: 1.1rem;
+				color: white;
+			}
+			.tip_area {
+				width: 90%;
+				margin: 1rem 5%;
+				background-color: white;
+				border-radius: 0.4rem;
+				height: 12rem;
+				position: absolute;
+				top: 33rem;
+				right: 0;
+				left: 0;
+				z-index: 200;
+			}
+			.tip_line {
+				height: 4rem;
+			}
+			.tip_line img {
+				width: 3rem;
+				height: 3rem;
+				margin: 0.5rem;
+				float: left;
+			}
+			.tip_div {
+				float: left;
+				width: calc(100% - 4.5rem);
+				margin: 0.5rem 0;
+				height: 3rem;
+				line-height: 1.5rem;
+			}
+			.weui-dialog__hd {
+				background-color: rgb(242,242,242);
+				padding: .5em 1.6em .5em;
+				color: black;
+			}
+			.weui-dialog__bd {
+				padding: 0 0.8em .8em;
+				height: 15rem;
+				overflow-y: scroll;
+				color: black;
+				font-weight: 200;
+			}
+			.weui-dialog__ft{
+				background-color: rgb(242,242,242);
+			}
+			.weui-dialog__ft *{
+				color: rgb(248,163,109) !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="content" id="mescroll">
+			<!-- 背景 -->
+			<img class="page_bg" src="../img/h5_bg.png" />
+			<!-- 内容输入区 -->
+			<div class="input_area">
+				<div class="input_line">
+					<input v-model="telValue" class="long" type="tel" maxlength="11" placeholder="请输入手机号" />
+				</div>
+				<div class="input_line">
+					<input v-model="yzmValue" class="long2" type="tel" placeholder="请输入手机验证码" />
+					<div @click="yzmClick" v-bind:class="yzm_btn_class" v-text="yzmTime2"></div>
+				</div>
+				<div class="input_line">
+					<input v-model="pwValue" maxlength="12" class="long" type="password" placeholder="请输入6~12位密码" />
+				</div>
+				<div class="input_line">
+					<div @click="btnClick" class="btn">立即注册</div>
+				</div>
+			</div>
+			<!-- 提示区 -->
+			<div class="tip_area">
+				<div class="tip_line">
+					<img src="../img/h5_ed.png" />
+					<div class="tip_div">
+						高额度放心贷款<br />
+						<span style="font-size: 0.7rem;">
+							最高享有
+							<span style="color: #06941e;">100000元</span>
+							借贷额度
+						</span>
+					</div>
+				</div>
+				<div class="tip_line">
+					<img src="../img/h5_dk.png" />
+					<div class="tip_div">
+						手机APP快速申请<br />
+						<span style="font-size: 0.7rem;">
+							<span style="color: #b923ff;">1分钟</span>
+							手机填表申请，快速方便
+						</span>
+					</div>
+				</div>
+				<div class="tip_line">
+					<img src="../img/h5_ks.png" />
+					<div class="tip_div">
+						最快1小时到账<br />
+						<span style="font-size: 0.7rem;">
+							到账时间快，短信通知您
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 免责声明 -->
+			<div class="popup popup-about">
+			  <div class="content-block">
+			    <p>About</p>
+			    <p><a href="#" class="close-popup">Close popup</a></p>
+			    <p>Lorem ipsum dolor ...</p>
+			  </div>
+			</div>
+			
+		</div>
+	</body>
+	<script>
+		 var app = new Vue({
+			el: '#mescroll',
+			data: {
+				telValue: '', // 手机号
+				yzmValue: '', // 验证码
+				pwValue: '',  // 密码
+				// 验证码计时
+				yzmTime: '发送验证码',
+				yzmTime2: '发送验证码',
+				yzm_btn_class: 'yzm_btn'
+			},
+			watch: {
+				// 手机号值改变事件
+				telValue: function(val,oldVal){
+					if (val.length == 11) {
+						// 弹出免责申明
+						weui.dialog({
+						    title: '免责声明',
+						    content: '人工智能是计算机科学的一个分支，它企图了解智能的实质，并生产出一种新的能以人类智能相似的方式做出反应的智能机器，该领域的研究包括机器人、语言识别、图像识别、自然语言处理和专家系统等。人工智能从诞生以来，理论和技术日益成熟，应用领域也不断扩大，可以设想，未来人工智能带来的科技产品，将会是人类智慧的“容器”。人工智能可以对人的意识、思维的信息过程的模拟。人工智能不是人的智能，但能像人那样思考、也可能超过人的智能。'
+								   + '人工智能是一门极富挑战性的科学，从事这项工作的人必须懂得计算机知识，心理学和哲学。人工智能是包括十分广泛的科学，它由不同的领域组成，如机器学习，计算机视觉等等，总的说来，人工智能研究的一个主要目标是使机器能够胜任一些通常需要人类智能才能完成的复杂工作。但不同的时代、不同的人对这种“复杂工作”的理解是不同的。[1]  2017年12月，人工智能入选“2017年度中国媒体十大流行语”。',
+						    buttons: [{
+						        label: '明白了',
+						        type: 'default',
+						        onClick: function () { 
+						        		
+						        }
+						    }]
+						});
+					}
+				},
+			},
+			methods: {
+				// 验证码 按钮点击事件
+				yzmClick: function(){
+					var self = this;
+					if (self.yzmTime != '发送验证码') {
+						return;
+					}
+					if (Util.checkPhone(this.telValue)) {
+						var urlStr = Util.baseUrl + '/DuG/api/basics/validateCode/findValidateCode.do';
+						var md5Str = Util.basekey + this.telValue + '1';
+						$.ajax({
+							type:"get",
+							url: urlStr,
+							async:true,
+							data: {
+								phone: this.telValue,
+								sourceType: 1,
+								key: Util.basekey,
+								auth: Util.base32Encode('key,phone,sourceType'),
+								token: md5(md5Str)
+							},
+							success: function(res){
+								var res = JSON.parse(res);
+								// 发送成功
+								if (res.ret_code == '0') {
+									$.toast('发送成功');
+									self.yzmTime = 120;
+								    var timer = setInterval(function(){
+										self.yzmTime =  self.yzmTime - 1;
+										self.yzmTime2 = self.yzmTime + '(s)'
+										self.yzm_btn_class = 'yzm_btn_dis';
+										if (self.yzmTime == 0) {
+											clearInterval(timer);
+											self.yzmTime = '发送验证码'; 
+											self.yzmTime2 = '发送验证码';
+											self.yzm_btn_class = 'yzm_btn';
+										}
+									},1000);
+								} else{
+									$.toast(res.ret_msg);
+								}
+							},
+							error: function(res){
+								$.toast('网路请求失败，请稍后重试');
+							}
+						});
+					} else{
+						$.toast("手机号输入有误");
+					}
+				},
+				// 立即注册按钮点击事件
+				btnClick: function(){
+					if (!Util.checkPhone(this.telValue)) {
+						$.toast("手机号输入有误");
+						return;
+					}
+					if (this.yzmValue.length == 0) {
+						$.toast("验证码输入有误");
+						return;
+					}
+					if (this.pwValue.length < 6) {
+						$.toast("请输入6~12位密码");
+						return;
+					}
+					var urlStr = Util.baseUrl + '/DuG/api/user/user/newUser.do';
+					var referee = Util.getQueryString('referee');
+					var passWord=md5(this.pwValue);  
+					var md5Str = Util.basekey + this.telValue + '2' + passWord + this.yzmValue + referee;
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							phone: this.telValue,
+							passWord:passWord,
+							validateCode: this.yzmValue,
+							sourceType: 2,
+							referee: referee,
+							key: Util.basekey,
+							auth: Util.base32Encode('key,phone,sourceType,passWord,validateCode,referee'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							//alert(res);
+							var res = JSON.parse(res);
+							// 注册成功
+							if (res.ret_code == '0') {
+								$.toast('注册成功');
+								setTimeout(function(){
+									window.location.href = 'https://www.baidu.com';
+								},1500);
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					});
+				},
+			}
+		})
+	</script>
+</html>

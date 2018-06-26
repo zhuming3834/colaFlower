@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>个人信息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/sm.css" />
+		<link rel="stylesheet" href="../css/info.css" />
+		<link rel="stylesheet" href="../css/login.css" />
+		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		
+		<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+		<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
+
+	</head>
+	<body class="page" style="background-color: #f6f6f6;">
+		<div id="app" class="content">
+			<div class="info_title">基本信息</div>
+			<div class="line">
+				<div class="line_title">昵称</div>
+				<input class="line_input" v-model="userInfo.userName" placeholder="请输入" />
+			</div>
+			<div class="line" @click="shengriClick">
+				<div class="line_title">生日</div>
+				<div v-bind:class="userInfo.birthday.classNa">{{userInfo.birthday.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line">
+				<div class="line_title">手机号码</div>
+				<div class="line_select_active">{{userInfo.tel}}</div>
+			</div>
+			<div class="line" @click="telSmClick">
+				<div class="line_title">手机号码实名</div>
+				<div v-bind:class="userInfo.phoneRealName.classNa">{{userInfo.phoneRealName.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line" @click="zhiyeClick">
+				<div class="line_title">职业</div>
+				<div v-bind:class="userInfo.profession.classNa">{{userInfo.profession.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line" @click="gongziClick" v-if="userInfo.profession.value == 1 || userInfo.profession.value == 3 || userInfo.profession.value == ''">
+				<div class="line_title">月打卡工资</div>
+				<div v-bind:class="userInfo.realWage.classNa">{{userInfo.realWage.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line" @click="gongSCClick" v-if="userInfo.profession.value == 1 || userInfo.profession.value == 3 || userInfo.profession.value == ''">
+				<div class="line_title">工作时长</div>
+				<div v-bind:class="userInfo.workTime.classNa">{{userInfo.workTime.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line" @click="taobClick" v-if="userInfo.profession.value == 2 || userInfo.profession.value == 4">
+				<div class="line_title">淘宝</div>
+				<div v-bind:class="userInfo.taobaoBuy.classNa">{{userInfo.taobaoBuy.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line" @click="zhimaClick">
+				<div class="line_title">芝麻信用分</div>
+				<div v-bind:class="userInfo.sesameCredit.classNa">{{userInfo.sesameCredit.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div class="line" @click="ywxykClick">
+				<div class="line_title">有无信用卡</div>
+				<div v-bind:class="userInfo.isCreditCard.classNa">{{userInfo.isCreditCard.label}}<span class="icon icon-right"></span></div>
+			</div>
+			<div v-if="userInfo.isCreditCard.label == '有' || userInfo.isCreditCard.label == '请选择'">
+				<div class="line" @click="dzxykedClick">
+					<div class="line_title">单张信用卡额度</div>
+					<div v-bind:class="userInfo.creditCardLine.classNa">{{userInfo.creditCardLine.label}}<span class="icon icon-right"></span></div>
+				</div>
+				<div class="line" @click="xykyqClick">
+					<div class="line_title">信用卡逾期</div>
+					<div v-bind:class="userInfo.creditCardOverdue.classNa">{{userInfo.creditCardOverdue.label}}<span class="icon icon-right"></span></div>
+				</div>
+			</div>
+			
+			<div v-if="userInfo.profession.value == 1 || userInfo.profession.value == 3 || userInfo.profession.value == ''">
+				<div class="info_title">完善信息</div>
+				<div class="line" @click="fcClick">
+					<div class="line_title">房产</div>
+					<div v-bind:class="userInfo.houseProperty.classNa">{{userInfo.houseProperty.label}}<span class="icon icon-right"></span></div>
+				</div>
+				<div class="line" @click="ccClick">
+					<div class="line_title">车产</div>
+					<div v-bind:class="userInfo.carProduction.classNa">{{userInfo.carProduction.label}}<span class="icon icon-right"></span></div>
+				</div>
+				<div class="line" @click="shebClick">
+					<div class="line_title">社保</div>
+					<div v-bind:class="userInfo.socialSecurity.classNa">{{userInfo.socialSecurity.label}}<span class="icon icon-right"></span></div>
+				</div>
+				<div class="line" @click="gongjjClick">
+					<div class="line_title">公积金</div>
+					<div v-bind:class="userInfo.accumulationFund.classNa">{{userInfo.accumulationFund.label}}<span class="icon icon-right"></span></div>
+				</div>
+				<div class="line" @click="shouxClick">
+					<div class="line_title">寿险</div>
+					<div v-bind:class="userInfo.lifeInsurance.classNa">{{userInfo.lifeInsurance.label}}<span class="icon icon-right"></span></div>
+				</div>
+			</div>
+			<!-- 保存按钮 -->
+			<div @click="saveClick" v-bind:class="loginClass">保存</div>
+			
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				loginClass: 'login_btn_active',
+				userInfo: {
+					 userId: '',			    // 用户ID
+					 userName: '',				// 用户昵称
+					 photoImg: '',			// 用户头像
+					 birthday: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },				// 生日
+					 tel: '请输入',          // 手机号
+					 phoneRealName: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			// 手机号码是否实名       1已实名认证小于6个月，2已实名认证大于6个月，3未实名认证
+					 profession: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			    // 职业					1、上班族，2、学生，3、企业老板，4、其他
+					 realWage: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },				// 实际工资				1、小于4千元，2、4千元—6千元，3、6千元—1万元，4、1万元以上
+					 workTime: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },				// 工作时长				1、小于3个月，2、3-6个月，3、6个月—1年，4、1年以上
+					 sesameCredit: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			// 芝麻信用				1、550以下，2、550-600，3、600-650，4、650以上
+					 isCreditCard: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			// 是否有信用卡			0、无  1、有
+					 creditCardLine: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },		    // 信用额度				1、2千以下，2、2千—5千，3、5千—1万，4、1万—5万，5、5万以上
+					 creditCardOverdue:{
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },		// 信用卡逾期			1、信用卡逾期已还清，2、信用卡逾期未还清，3、信用卡无逾期 	4、无信用卡
+					 taobaoBuy:{
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },				// 淘宝购物记录			1、购买实物：0次  2、购买实物：1~3次   3、购买实物：大于3次
+					 houseProperty:{
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			// 房产信息				1、有房贷 2、红本在手 3、无房
+					 carProduction:{
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			// 车产信息				1、有车贷 2、有车无贷 3、无车
+					 socialSecurity:{
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },		    // 社保					1、无社保 2、半年内 3、超半年
+					 accumulationFund: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },		// 公积金				1、无公积金2、半年内 3、超半年
+					 lifeInsurance: {
+					 	label: '请选择',
+						value: '',
+						classNa: 'line_select'
+					 },			// 寿险					1、未投保2、投保未满两年 3、投保满两年
+				     isPerfect: 0	            //信息是否完善   0未完善  1已完善
+				}
+			},
+			watch: {
+				userInfo: {
+					handler(curVal,oldVal){
+						var line_select = document.getElementsByClassName('line_select').length;
+						console.log(line_select);
+						if (line_select <= 1 && this.userInfo.userName.length > 0) {
+							this.loginClass = 'login_btn_active';
+							this.userInfo.isPerfect = 1;
+						}else{
+							this.loginClass = 'login_btn';
+							this.userInfo.isPerfect = 0;
+						}
+　　　　　　　　　　	},
+　　　　　　　　　　	deep:true
+				}
+			},
+			mounted: function() {
+				this.userInfo.tel = localStorage.getItem('userPhone') || '';	
+				this.userInfo.userId = localStorage.getItem('userId') || '';	
+				this.getData();
+			},
+			methods: {
+				// 获取用户数据
+				getData: function(){
+					var self = this;
+					var urlStr = Util.baseUrl + '/DuG/api/user/user/findUserInfo.do';
+					var userId = self.userInfo.userId
+					var md5Str = Util.basekey + userId;
+							  
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							userId:	userId,			                // 用户ID
+							key: Util.basekey,
+							auth: Util.base32Encode('key,userId'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							res = JSON.parse(res);
+							var ret_data = res.ret_data;
+							// 请求成功
+							if (res.ret_code == '0') {
+								self.userInfo.userName = ret_data.userName;
+								self.userInfo.photoImg = ret_data.photoImg;
+								
+								if (ret_data.birthday != '') {
+									self.userInfo.birthday = {
+									 	label: ret_data.birthday,
+										value: ret_data.birthday,
+										classNa: 'line_select_active'
+									};
+								}
+								switch (ret_data.phoneRealName){
+									case '1':
+										self.userInfo.phoneRealName = {
+											label: '已实名认证小于6个月',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.phoneRealName = {
+											label: '已实名认证小于6个月',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.phoneRealName = {
+											label: '已实名认证小于6个月',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.phoneRealName = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.profession){
+									case '1':
+										self.userInfo.profession = {
+											label: '上班族',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.profession = {
+											label: '学生',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.profession = {
+											label: '企业老板',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.profession = {
+											label: '其他',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.profession = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+
+								switch (ret_data.profession){
+									case '1':
+										self.userInfo.profession = {
+											label: '上班族',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.profession = {
+											label: '学生',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.profession = {
+											label: '企业老板',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.profession = {
+											label: '其他',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.realWage = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.realWage){
+									case '1':
+										self.userInfo.realWage = {
+											label: '小于4千元',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.realWage = {
+											label: '4千元——6千元',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.realWage = {
+											label: '6千元——1万元',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.realWage = {
+											label: '1万元以上',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.realWage = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.workTime){
+									case '1':
+										self.userInfo.workTime = {
+											label: '小于3个月',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.workTime = {
+											label: '3——6个月',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.workTime = {
+											label: '6个月——1年',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.workTime = {
+											label: '1年以上',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.workTime = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.sesameCredit){
+									case '1':
+										self.userInfo.sesameCredit = {
+											label: '550分以下',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.sesameCredit = {
+											label: '550-600',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.sesameCredit = {
+											label: '600-650',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.sesameCredit = {
+											label: '650以上',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										
+										break;
+									default:
+										self.userInfo.sesameCredit = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.isCreditCard){
+									case '1':
+										self.userInfo.isCreditCard = {
+											label: '无',
+										    value: 0,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.isCreditCard = {
+											label: '有',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.isCreditCard = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.creditCardLine){
+									case '1':
+										self.userInfo.creditCardLine = {
+											label: '2千以下',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.creditCardLine = {
+											label: '2千—5千',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.creditCardLine = {
+											label: '5千—1万',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.creditCardLine = {
+											label: '1万—5万',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '5':
+										self.userInfo.creditCardLine = {
+											label: '5万以上',
+										    value: 5,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.creditCardLine = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.creditCardOverdue){
+									case '1':
+										self.userInfo.creditCardOverdue = {
+											label: '信用卡逾期已还清',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.creditCardOverdue = {
+											label: '信用卡逾期未还清',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.creditCardOverdue = {
+											label: '信用卡无逾期',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '4':
+										self.userInfo.creditCardOverdue = {
+											label: '无信用卡',
+										    value: 4,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.creditCardOverdue = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.taobaoBuy){
+									case '1':
+										self.userInfo.taobaoBuy = {
+											label: '0次',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.taobaoBuy = {
+											label: '1~3次',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.taobaoBuy = {
+											label: '大于3次',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.taobaoBuy = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.houseProperty){
+									case '1':
+										self.userInfo.houseProperty = {
+											label: '有房贷',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.houseProperty = {
+											label: '红本在手',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.houseProperty = {
+											label: '无房',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.houseProperty = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.carProduction){
+									case '1':
+										self.userInfo.carProduction = {
+											label: '有车贷',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.carProduction = {
+											label: '有车无贷',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.carProduction = {
+											label: '无车',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.carProduction = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+								switch (ret_data.socialSecurity){
+									case '1':
+										self.userInfo.socialSecurity = {
+											label: '无社保',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.socialSecurity = {
+											label: '半年内',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.socialSecurity = {
+											label: '超半年',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.socialSecurity = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}	
+								switch (ret_data.accumulationFund){
+									case '1':
+										self.userInfo.accumulationFund = {
+											label: '无公积金',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.accumulationFund = {
+											label: '半年内',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.accumulationFund = {
+											label: '超半年',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.accumulationFund = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}		
+								switch (ret_data.lifeInsurance){
+									case '1':
+										self.userInfo.lifeInsurance = {
+											label: '未投保',
+										    value: 1,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '2':
+										self.userInfo.lifeInsurance = {
+											label: '投保未满两年',
+										    value: 2,
+										    classNa: 'line_select_active'
+										};
+										break;
+									case '3':
+										self.userInfo.lifeInsurance = {
+											label: '投保满两年',
+										    value: 3,
+										    classNa: 'line_select_active'
+										};
+										break;
+									default:
+										self.userInfo.lifeInsurance = {
+											label: '请选择',
+										    value: '',
+										    classNa: 'line_select'
+										};
+										break;
+								}
+//								 lifeInsurance: {
+//								 	label: '请选择',
+//									value: '',
+//									classNa: 'line_select'
+//								 }
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					});
+				},
+				// 保存按钮点击事件
+				saveClick: function(){
+					if (this.userInfo.isPerfect == 0) {
+						$.toast('请先完善个人信息');
+						return;
+					}
+					var self = this;
+					var urlStr = Util.baseUrl + '/DuG/api/user/user/modifyUserInfo.do';
+					var md5Str = Util.basekey 
+							   + self.userInfo.userId 
+							   + self.userInfo.userName 
+							   + self.userInfo.photoImg
+							   + self.userInfo.birthday.value
+							   + self.userInfo.phoneRealName.value
+							   + self.userInfo.profession.value
+							   + self.userInfo.realWage.value
+							   + self.userInfo.workTime.value
+							   + self.userInfo.sesameCredit.value
+							   + self.userInfo.isCreditCard.value
+							   + self.userInfo.creditCardLine.value
+							   + self.userInfo.creditCardOverdue.value
+							   + self.userInfo.taobaoBuy.value
+							   + self.userInfo.houseProperty.value
+							   + self.userInfo.carProduction.value
+							   + self.userInfo.socialSecurity.value
+							   + self.userInfo.accumulationFund.value
+							   + self.userInfo.lifeInsurance.value
+							   + self.userInfo.isPerfect;
+					$.ajax({
+						type:"get",
+						url: urlStr,
+						async:true,
+						data: {
+							userId:	self.userInfo.userId,			                // 用户ID
+							userName	: self.userInfo.userName,			            // 用户昵称
+							photoImg	: self.userInfo.photoImg,		                // 用户头像（这个暂时先传递空值，等我上传写好）
+							birthday	: self.userInfo.birthday.value,		            // 生日
+							phoneRealName: self.userInfo.phoneRealName.value,	    // 手机号码是否实名       1已实名认证小于6个月，2已实名认证大于6个月，3未实名认证
+							profession:	self.userInfo.profession.value,		        // 职业					1、上班族，2、学生，3、企业老板，4、其他
+							realWage	: self.userInfo.realWage.value,			        // 实际工资				1、小于4千元，2、4千元—6千元，3、6千元—1万元，4、1万元以上
+							workTime	: self.userInfo.workTime.value,			        // 工作时长				1、小于3个月，2、3-6个月，3、6个月—1年，4、1年以上
+							sesameCredit	: self.userInfo.sesameCredit.value,		    // 芝麻信用				1、550以下，2、550-600，3、600-650，4、650以上
+							isCreditCard	: self.userInfo.isCreditCard.value,		    // 是否有信用卡			0、无  1、有
+							creditCardLine: self.userInfo.creditCardLine.value,	    // 信用额度				1、2千以下，2、2千—5千，3、5千—1万，4、1万—5万，5、5万以上
+							creditCardOverdue: self.userInfo.creditCardOverdue.value,	// 信用卡逾期			1、信用卡逾期已还清，2、信用卡逾期未还清，3、信用卡无逾期 	4、无信用卡
+							taobaoBuy: self.userInfo.taobaoBuy.value,			    // 淘宝购物记录			1、购买实物：0次  2、购买实物：1~3次   3、购买实物：大于3次
+							houseProperty: self.userInfo.houseProperty.value,	    // 房产信息				1、有房贷 2、红本在手 3、无房
+							carProduction: self.userInfo.carProduction.value,	    // 车产信息				1、有车贷 2、有车无贷 3、无车
+							socialSecurity:	self.userInfo.socialSecurity.value,	    // 社保					1、无社保 2、半年内 3、超半年
+							accumulationFund	: self.userInfo.accumulationFund.value,	// 公积金				1、无公积金2、半年内 3、超半年
+							lifeInsurance: self.userInfo.lifeInsurance.value,  	    // 寿险					1、未投保2、投保未满两年 3、投保满两年
+						    isPerfect: self.userInfo.isPerfect,                     // 信息是否完善   0未完善  1已完善
+							key: Util.basekey,
+							auth: Util.base32Encode('key,userId,userName,photoImg,birthday,phoneRealName,profession,realWage,workTime,sesameCredit,isCreditCard,creditCardLine,creditCardOverdue,taobaoBuy,houseProperty,carProduction,socialSecurity,accumulationFund,lifeInsurance,isPerfect'),
+							token: md5(md5Str)
+						},
+						success: function(res){
+							res = JSON.parse(res);
+							// 请求成功
+							if (res.ret_code == '0') {
+								setTimeout(function () {
+									window.location.href = document.referrer;
+							    }, 2000);
+								$.toast('保存成功');
+								window.location.href = 'wode.html'
+							} else{
+								$.toast(res.ret_msg);
+							}
+						},
+						error: function(res){
+							$.toast('网路请求失败，请稍后重试');
+						}
+					})
+				},
+				// 生日点击事件
+				shengriClick: function(){
+					var self = this;
+					weui.datePicker({
+					    start: 1900,
+					    end: 2099,
+					    defaultValue: [1990, 6, 15],
+					    onConfirm: function(result){
+					        var year_label = result[0].label;
+					        var year_value = result[0].value;
+					        var mouth_label = result[1].label;
+					        var mouth_value = result[1].value;
+					        var day_label = result[2].label;
+					        var day_value = result[2].value;
+					        self.userInfo.birthday = {
+					        		label: year_label + '-' + mouth_label + '-' + day_label,
+					        		value: year_value + '-' + mouth_value + '-' + day_value,
+					        		classNa: 'line_select_active'
+					        }
+					    },
+					    id: 'datePicker'
+					});	
+				},
+				// 手机号实名点击事件
+				telSmClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '已实名认证小于6个月',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '已实名认证大于6个月',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '未实名认证',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					   onConfirm: function (result) {
+					   		self.userInfo.phoneRealName = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 职业点击事件
+				zhiyeClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '上班族',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '学生',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '企业老板',
+						    value: 3,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '其他',
+						    value: 4,
+						    classNa: 'line_select_active'
+						}],{
+					   onConfirm: function (result) {
+					       self.userInfo.profession = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 月打开工资点击事件
+				gongziClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '小于4千元',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '4千元——6千元',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '6千元——1万元',
+						    value: 3,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '1万元以上',
+						    value: 4,
+						    classNa: 'line_select_active'
+						}],{
+					   onConfirm: function (result) {
+					       self.userInfo.realWage = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 工作时长点击事件
+				gongSCClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '小于3个月',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '3—6个月',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '6个月——1年',
+						    value: 3,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '1年以上',
+						    value: 4,
+						    classNa: 'line_select_active'
+						}],{
+					   onConfirm: function (result) {
+					       self.userInfo.workTime = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 淘宝
+				taobClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '购买实物：0次',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '购买实物：1~3次',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '购买实物：大于3次',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					   onConfirm: function (result) {
+					       self.userInfo.taobaoBuy = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 芝麻分点击事件
+				zhimaClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '550分以下',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '550-600',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '600-650',
+						    value: 3,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '650以上',
+						    value: 4,
+						    classNa: 'line_select_active'
+						}],{
+					   onConfirm: function (result) {
+					       self.userInfo.sesameCredit = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 有无  信用卡
+				ywxykClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '无',
+						    value: 0,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '有',
+						    value: 1,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.isCreditCard = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 单张信用卡额度
+				dzxykedClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '2千以下',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '2千——5千',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '5千——1万',
+						    value: 3,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '1万——5万',
+						    value: 4,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '5万以上',
+						    value: 5,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.creditCardLine = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 信用卡逾期点击事件
+				xykyqClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '信用卡逾期已还清',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '信用卡逾期未还清',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '信用卡无逾期',
+						    value: 3,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '无信用卡',
+						    value: 4,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.creditCardOverdue = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 房产点击事件
+				fcClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '有房贷',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '红本在手',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '无房',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.houseProperty = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 车产点击事件
+				ccClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '有车贷',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '有车无贷',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '无车',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.carProduction = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 社保点击事件
+				shebClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '无社保',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '半年内',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '超半年',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.socialSecurity = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 公积金点击事件
+				gongjjClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '无公积金',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '半年内',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '超半年',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.accumulationFund = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+				// 寿险点击事件
+				shouxClick: function(){
+					var self = this;
+					weui.picker([
+						{
+						    label: '未投保',
+						    value: 1,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '投保未满两年',
+						    value: 2,
+						    classNa: 'line_select_active'
+						},
+						{
+						    label: '投保满两年',
+						    value: 3,
+						    classNa: 'line_select_active'
+						}],{
+					    onConfirm: function (result) {
+					       self.userInfo.lifeInsurance = result[0];
+					   },
+					   id: 'singleLinePicker'
+					});
+				},
+			},
+		})
+	</script>
+</html>
