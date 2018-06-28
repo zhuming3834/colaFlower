@@ -29,12 +29,12 @@
 					<div class="line_title">关于我们</div>
 				</a>
 			</div>
-			<div class="line">
-				<a href="yjfk.html">
-					<img src="../img/yjfk.png" />
-					<div class="line_title">意见反馈</div>
-				</a>
-			</div>
+			<!--<div class="line">-->
+				<!--<a href="yjfk.html">-->
+					<!--<img src="../img/yjfk.png" />-->
+					<!--<div class="line_title">意见反馈</div>-->
+				<!--</a>-->
+			<!--</div>-->
 			<div v-if="userId != ''" @click="loginOutClick" class="login_out">退出</div>
 		</div>
 	</body>
@@ -53,6 +53,10 @@
 					localStorage.removeItem('userId');
 					localStorage.removeItem('userPhone');
 					localStorage.removeItem('isEnter');
+                    localStorage.removeItem('refereeCode');//邀请码
+                    localStorage.removeItem('referee');//渠道id
+
+
 					$.toast('退出成功');
 					setTimeout(function(){
 						window.location.replace('login.html');
