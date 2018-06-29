@@ -1,192 +1,197 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>我的</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-	    <meta name="apple-mobile-web-app-capable" content="yes">
-	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<link rel="stylesheet" href="../css/sm.css" />
-		<link rel="stylesheet" href="../css/common.css" />
-		<link rel="stylesheet" href="../css/wode.css" />
-		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
-		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
-		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
-		<script type="text/javascript" src="../js/util.js" ></script>
-		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-		
-		<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
-		<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
-		
-	</head>
-	<body class="page" style="background-color: white;">
-		<div id="app" class="content">
-			<div class="user_info" @click="enterInfo">
-				<img class="bg_img" src="../img/user_bg.png" />
-				<div class="info">
-					<img class="info_img" src="../img/default.png" />
-					<div class="info_name" v-text="userInfo.name"></div>
-					<div class="info_tel" v-text="userInfo.userName"></div>
-					<div class="info_ok" v-if="userInfo.userName == 1">已完善</div>
-					<span class="icon icon-right"></span>
-				</div>
-			</div>
-			
-			<div class="line">
-				<a href="liulanjilu.html">
-					<img src="../img/lljl.png" />
-					<div class="line_title">浏览记录</div>
-				</a>
-			</div>
-			<div class="line">
-				<a href="shoucang.html">
-					<img src="../img/sc.png" />
-					<div class="line_title">收藏</div>
-				</a>
-			</div>
-			<div class="line" style="display: none;">
-				<a href="hktx.html">
-					<img src="../img/hktx.png" />
-					<div class="line_title">还款提醒</div>
-				</a>
-			</div>
-			<div class="line">
-				<a href="xiaoxi.html">
-					<img src="../img/wdxx.png" />
-					<div class="line_title">我的消息</div>
-					<!--<span class="badge">10</span>-->
-				</a>
-			</div>
-			<div class="line">
-				<a href="#" id="guanzuwx">
-					<img src="../img/gzwx.png" />
-					<div class="line_title">关注公众号</div>
-				</a>
-			</div>
-			<div class="line">
-				<a href="help.html">
-					<img src="../img/bzzx.png" />
-					<div class="line_title">帮助中心</div>
-				</a>
-			</div>
-			<div class="line">
-				<a href="yjfk.html">
-					<img src="../img/bzzx.png" />
-					<div class="line_title">意见反馈</div>
-				</a>
-			</div>
-			<div class="line last_one">
-				<a href="shezhi.html">
-					<img src="../img/sz.png" />
-					<div class="line_title">设置</div>
-				</a>
-			</div>
+<head>
+	<meta charset="utf-8" />
+	<title>我的</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="../css/sm.css" />
+	<link rel="stylesheet" href="../css/common.css" />
+	<link rel="stylesheet" href="../css/wode.css" />
+	<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+	<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+	<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+	<script type="text/javascript" src="../js/util.js" ></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+	<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
+
+</head>
+<body class="page" style="background-color: white;">
+<div id="app" class="content">
+	<div class="user_info" @click="enterInfo">
+		<img class="bg_img" src="../img/user_bg.png" />
+		<div class="info">
+			<img class="info_img" src="../img/default.png" />
+			<div class="info_name" v-text="userInfo.name"></div>
+			<div class="info_tel" v-text="userInfo.userName"></div>
+			<div class="info_ok" v-if="userInfo.userName == 1">已完善</div>
+			<span class="icon icon-right"></span>
 		</div>
-		
-		<nav class="bar bar-tab">
-		  <a class="tab-item external" href="home.html">
-		    <span class="icon icon-home"></span>
-		    <span class="tab-label">首页</span>
-		  </a>
-		  <a class="tab-item external" href="daikuan.html">
-		    <span class="icon icon-message"></span>
-		    <span class="tab-label">贷款</span>
-		  </a>
-		  <a class="tab-item external active" href="wode.html">
-		    <span class="icon icon-me"></span>
-		    <span class="tab-label">我的</span>
-		  </a>
-		</nav>
-		
-		<div class="popup popup-about">
-		  <div class="content-block">
-		  	<div class="popup_title">关注公众号</div>
-		  	<img src="../img/gzgzh.png" />
-		    <div class="popup_btn"><a href="#" class="close-popup">确定</a></div>
-		  </div>
-		</div>
-		
-		
-	</body>
-	<script>
-		$(document).on('click','#guanzuwx', function () {
-		  $.popup('.popup-about');
-		});
-		
-		var app = new Vue({
-			el: '#app',
-			data: {
-				userInfo: {
-					name: '实名认证',
-					userId: '',
-					userName: '尚未登录',
-					isPerfect: '0', // 信息是否完善   0未完善  1已完善
-				},
-			},
-			mounted: function() {
-				this.userInfo.name = localStorage.getItem('userPhone') || '实名认证',
-				this.userInfo.userId = localStorage.getItem('userId') || '',
-				this.getUserInfo();
-			},
-			methods: {
-				// 获取用户信息
-				getUserInfo: function(){
-					var self = this;
-					var urlStr = Util.baseUrl + '/DuG/api/user/user/findUserInfo.do';
-					var userId = self.userInfo.userId
-					var md5Str = Util.basekey + userId;
-						
-					if (userId == '') {
-						return;
-					}	
-						
-					$.ajax({
-						type:"get",
-						url: urlStr,
-						async:true,
-						data: {
-							userId:	userId,		// 用户ID
-							key: Util.basekey,
-							auth: Util.base32Encode('key,userId'),
-							token: md5(md5Str)
-						},
-						success: function(res){
-							res = JSON.parse(res);
-							var ret_data = res.ret_data;
-							self.userInfo.userName = ret_data.userName || '嘟客贷款';
-							self.userInfo.isPerfect = ret_data.isPerfect;
-						},
-						error: function(res){
-							$.toast('网路请求失败，请稍后重试');
-						}
-					});
-				},
-				// 进入个人信息
-				enterInfo: function(){
-					var userId = localStorage.getItem('userId') || '';
-					if (userId == '') {
-						weui.confirm('您还未登录喔~', {
-						    title: '提示',
-						    buttons: [{
-						        label: '取消',
-						        type: 'default',
-						        onClick: function(){ 
-						        		
-						        }
-						    }, {
-						        label: '去登录',
-						        type: 'primary',
-						        onClick: function(){ 
-						        		window.location.href = 'login.html';
-						        }
-						    }]
-						});
-						return;
-					}
-					window.location.href = 'info.html';
-				},
-			}
-		})
-	</script>
+	</div>
+	<div class="line">
+		<a href="myCommission.html">
+			<img src="../img/lljl.png" />
+			<div class="line_title">我的佣金</div>
+		</a>
+	</div>
+	<div class="line">
+		<a href="liulanjilu.html">
+			<img src="../img/lljl.png" />
+			<div class="line_title">浏览记录</div>
+		</a>
+	</div>
+	<div class="line">
+		<a href="shoucang.html">
+			<img src="../img/sc.png" />
+			<div class="line_title">收藏</div>
+		</a>
+	</div>
+	<div class="line" style="display: none;">
+		<a href="hktx.html">
+			<img src="../img/hktx.png" />
+			<div class="line_title">还款提醒</div>
+		</a>
+	</div>
+	<div class="line">
+		<a href="xiaoxi.html">
+			<img src="../img/wdxx.png" />
+			<div class="line_title">我的消息</div>
+			<!--<span class="badge">10</span>-->
+		</a>
+	</div>
+	<div class="line">
+		<a href="#" id="guanzuwx">
+			<img src="../img/gzwx.png" />
+			<div class="line_title">关注公众号</div>
+		</a>
+	</div>
+	<div class="line">
+		<a href="help.html">
+			<img src="../img/bzzx.png" />
+			<div class="line_title">帮助中心</div>
+		</a>
+	</div>
+	<div class="line">
+		<a href="yjfk.html">
+			<img src="../img/bzzx.png" />
+			<div class="line_title">意见反馈</div>
+		</a>
+	</div>
+	<div class="line last_one">
+		<a href="shezhi.html">
+			<img src="../img/sz.png" />
+			<div class="line_title">设置</div>
+		</a>
+	</div>
+
+</div>
+
+<nav class="bar bar-tab">
+	<a class="tab-item external" href="home.html">
+		<span class="icon icon-home"></span>
+		<span class="tab-label">首页</span>
+	</a>
+	<a class="tab-item external" href="daikuan.html">
+		<span class="icon icon-message"></span>
+		<span class="tab-label">贷款</span>
+	</a>
+	<a class="tab-item external active" href="wode.html">
+		<span class="icon icon-me"></span>
+		<span class="tab-label">我的</span>
+	</a>
+</nav>
+
+<div class="popup popup-about">
+	<div class="content-block">
+		<div class="popup_title">关注公众号</div>
+		<img src="../img/gzgzh.png" />
+		<div class="popup_btn"><a href="#" class="close-popup">确定</a></div>
+	</div>
+</div>
+
+
+</body>
+<script>
+    $(document).on('click','#guanzuwx', function () {
+        $.popup('.popup-about');
+    });
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            userInfo: {
+                name: '实名认证',
+                userId: '',
+                userName: '尚未登录',
+                isPerfect: '0', // 信息是否完善   0未完善  1已完善
+            },
+        },
+        mounted: function() {
+            this.userInfo.name = localStorage.getItem('userPhone') || '实名认证',
+                this.userInfo.userId = localStorage.getItem('userId') || '',
+                this.getUserInfo();
+        },
+        methods: {
+            // 获取用户信息
+            getUserInfo: function(){
+                var self = this;
+                var urlStr = Util.baseUrl + '/DuG/api/user/user/findUserInfo.do';
+                var userId = self.userInfo.userId
+                var md5Str = Util.basekey + userId;
+
+                if (userId == '') {
+                    return;
+                }
+
+                $.ajax({
+                    type:"get",
+                    url: urlStr,
+                    async:true,
+                    data: {
+                        userId:	userId,		// 用户ID
+                        key: Util.basekey,
+                        auth: Util.base32Encode('key,userId'),
+                        token: md5(md5Str)
+                    },
+                    success: function(res){
+                        res = JSON.parse(res);
+                        var ret_data = res.ret_data;
+                        self.userInfo.userName = ret_data.userName || '嘟客贷款';
+                        self.userInfo.isPerfect = ret_data.isPerfect;
+                    },
+                    error: function(res){
+                        $.toast('网路请求失败，请稍后重试');
+                    }
+                });
+            },
+            // 进入个人信息
+            enterInfo: function(){
+                var userId = localStorage.getItem('userId') || '';
+                if (userId == '') {
+                    weui.confirm('您还未登录喔~', {
+                        title: '提示',
+                        buttons: [{
+                            label: '取消',
+                            type: 'default',
+                            onClick: function(){
+
+                            }
+                        }, {
+                            label: '去登录',
+                            type: 'primary',
+                            onClick: function(){
+                                window.location.href = 'login.html';
+                            }
+                        }]
+                    });
+                    return;
+                }
+                window.location.href = 'info.html';
+            },
+        }
+    })
+</script>
 </html>

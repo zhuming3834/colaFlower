@@ -1,360 +1,369 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>登录</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-	    <meta name="apple-mobile-web-app-capable" content="yes">
-	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<link rel="stylesheet" href="../css/sm.css" />
-		<link rel="stylesheet" href="../css/login.css" />
-		<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
-		<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
-		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
-		<script type="text/javascript" src="../js/util.js" ></script>
-	</head>
-	<body class="page" style="background-color: white;">
-		<div id="app">
-			<!-- 首页 注册 -->
-			<div class="top_title">
-				<div @click="goHomeClick" class="home">首页</div>
-				<div @click="goRegestClick" class="regest">注册</div>
-			</div>
-			<!-- 贷 字 -->
-			<div class="logo">
-				<img src="../img/dai.png" />
-			</div>
-			<!-- 登录 切换 -->
-			<div class="login_type">
-				<!--<div @click="is_tel = true" id="kuaijie" class="left">快捷登录</div>
-				<div class="middle">|</div>
-				<div @click="is_tel = false"   id="zhanghao" class="right">账号登录</div>-->
-			</div>
-			<!-- 快捷登录输入框 -->
-			<div id="tel_input" v-if="is_tel == true"> 
-				<div class="login_input">
-					<input v-model="telVal" type="tel" placeholder="请输入手机号" maxlength="11" />
-					<div @click="telVal = ''" v-if="showTelClear" class="clear" style="right: 0;"></div>
-				</div>
-				<div class="login_input">
-					<input v-model="yzmVal" type="tel" placeholder="请输入短信验证码" maxlength="4" />
-					<div @click="yzmVal = ''" v-if="showYzmClear" class="clear" style="right: 4.5rem;"></div>
-					<div @click="sendYzmClick" class="timer" v-bind:style="{color: yzmColor}" v-text="yzmTime2"></div>
-				</div>
-				<div class="login_input">
-					<input v-model="inviteCodeFirst" type="text" placeholder="请输入邀请码（可选）"  style="width: 9rem" id="codeFirst"/>
-					<div  class="clear" style="right: 0;"></div>
-				</div>
-			</div>
-			<!-- 账号密码输入框 -->
-			<div id="zhanghao_input" v-if="is_tel == false"> 
-				<div class="login_input">
-					<input v-model="zhanghao" type="tel" placeholder="请输入账号" />
-					<div @click="zhanghao = ''" v-if="showZhanghaoClear" class="clear" style="right: 0;"></div>
-				</div>
-				<div class="login_input">
-					<input style="width: 7.5rem;" v-model="passwd" v-bind:type="pwType" maxlength="22" placeholder="请输入6~22位密码" />
-					<div @click="showPwClick" v-bind:class="show_hide" style="right: 3.8rem;"></div>
-					<div @click="forgetPwClick" class="timer">忘记密码</div>
-				</div>
-				<div class="login_input">
-					<input v-model="inviteCodeSecond" type="text" placeholder="请输入邀请码（可选）"  style="width: 9rem" id="codeSecond"/>
-					<div  class="clear" style="right: 0;"></div>
-				</div>
-			</div>
-			<!-- 登录按钮 -->
-			<div @click="loginClick" v-bind:class="loginClass">登录</div>
-			<!-- 语音验证码 -->
-			<!--<div v-if="is_tel == true" class="login_yuyin">没收到短信？试试<span @click="yuyinClick" style="color: #1184FF;">电话语音验证码</span></div>-->
+<head>
+	<meta charset="utf-8" />
+	<title>登录</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="../css/sm.css" />
+	<link rel="stylesheet" href="../css/login.css" />
+	<link rel="stylesheet" href="../css/adnimations.css">
+	<script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+	<script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+	<script type="text/javascript" src="../js/util.js" ></script>
+</head>
+<body class="page" style="background-color: white;">
+<div id="app">
+	<!-- 首页 注册 -->
+	<div class="top_title">
+		<div @click="goHomeClick" class="home">首页</div>
+		<div @click="goRegestClick" class="regest" style="display: none;">注册</div>
+	</div>
+	<!-- 贷 字 -->
+	<div class="logo is-animate style3">
+		<!--<img src="../img/dai.png" />-->
+		<div>可</div>
+		<div>乐</div>
+		<div>花</div>
+	</div>
+	<!-- 登录 切换 -->
+	<div class="login_type">
+		<!--<div @click="is_tel = true" id="kuaijie" class="left">快捷登录</div>
+        <div class="middle">|</div>
+        <div @click="is_tel = false"   id="zhanghao" class="right">账号登录</div>-->
+	</div>
+	<!-- 快捷登录输入框 -->
+	<div id="tel_input" v-if="is_tel == true">
+		<div class="login_input">
+			<input v-model="telVal" type="tel" placeholder="请输入手机号" maxlength="11" />
+			<div @click="telVal = ''" v-if="showTelClear" class="clear" style="right: 0;"></div>
 		</div>
-	</body>
-	<script>
-	
-	function getQueryString(name) {  
-	    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");  
-	    var r = window.location.search.substr(1).match(reg);  
-	    if (r != null) return decodeURI(r[2]); return null;  
-	}
-	
-	$(function(){
-		if(getQueryString('referee') != null && getQueryString('referee') != ""){
-			localStorage.setItem('referee',getQueryString('referee'));
-		}
-	});
-	
-		var app = new Vue({
-			el: '#app',
-			data: {
-				is_tel: true,
-				show_hide: 'clear hide_pw',
-				pwType: 'password',
-				// 用户输入的手机号
-				telVal: '',
-                //快速登录时的邀请码
-                inviteCodeFirst:"",
-				//密码登录时的邀请码
-                inviteCodeSecond:"",
-				// 验证码
-				yzmVal: '',
-				// 显示手机号删除按钮
-				showTelClear: false,
-				// 显示验证码删除按钮
-				showYzmClear: false,
-				// 账号
-				zhanghao: '',
-				// 密码
-				passwd: '',
-				// 显示账号删除图标
-				showZhanghaoClear: false,
-				// 验证码计时
-				yzmTime: '发送验证码',
-				yzmTime2: '发送验证码',
-				// 登录按钮样式
-				loginClass: 'login_btn',
-				yzmColor: '#1184FF',
-			},
-			watch: {
-				// 快捷登录   账号密码登录  切换
-				is_tel: function(val,oldVal){
-					if (val == true) { // 快捷登录
-						$('#kuaijie').css('color','#FF2E03');
-						$('#zhanghao').css('color','#7A7A7A');
-						this.isActive1();
-					} else{ // 账号密码登录
-						$('#kuaijie').css('color','#7A7A7A');
-						$('#zhanghao').css('color','#FF2E03');
-						this.isActive2();
-					}
-				},
-				// 手机号值改变事件
-				telVal: function(val,oldVal){
-					if (val.length ==0) {
-						this.showTelClear = false;
-					} else{
-						this.showTelClear = true;
-					}
-					this.isActive1();
-				},
-				// 验证码值改变事件
-				yzmVal: function(val,oldVal){
-					if (val.length ==0) {
-						this.showYzmClear = false;
-					} else{
-						this.showYzmClear = true;
-					}
-					this.isActive1();
-				},
-				// 账号值改变事件
-				zhanghao: function(val,oldVal){
-					if (val.length ==0) {
-						this.showZhanghaoClear = false;
-					} else{
-						this.showZhanghaoClear = true;
-					}
-					this.isActive2();
-				},
-				passwd: function(val,oldVal){
-					this.isActive2();
-				},
-			},
-			mounted: function() {
-				this.isLogin();
-			},
-			methods: {
-				isLogin: function(){
-					var userId = localStorage.getItem('userId') || '';
-					if (userId != '') {
-						//window.location.href = 'home.html';
-					}	
-				},
-				// 返回首页
-				goHomeClick: function(){
-//					window.location.replace('home.html');
-                    //refereeCode推荐码  referee渠道ID
-					var refereeCode = "";
-					if(localStorage.getItem("refereeCode")){
-                        refereeCode = localStorage.getItem("refereeCode");
-					}
-                    var referee = "";
-					if(localStorage.getItem('referee')){
-                        referee = localStorage.getItem('referee');
-					}
+		<div class="login_input">
+			<input v-model="yzmVal" type="tel" placeholder="请输入短信验证码" maxlength="4" />
+			<div @click="yzmVal = ''" v-if="showYzmClear" class="clear" style="right: 4.5rem;"></div>
+			<div @click="sendYzmClick" class="timer" v-bind:style="{color: yzmColor}" v-text="yzmTime2"></div>
+		</div>
+		<div class="login_input">
+			<input v-model="inviteCodeFirst" type="text" placeholder="请输入邀请码（可选）"  style="width: 9rem" id="codeFirst"/>
+			<div  class="clear" style="right: 0;"></div>
+		</div>
+	</div>
+	<!-- 账号密码输入框 -->
+	<div id="zhanghao_input" v-if="is_tel == false">
+		<div class="login_input">
+			<input v-model="zhanghao" type="tel" placeholder="请输入账号" />
+			<div @click="zhanghao = ''" v-if="showZhanghaoClear" class="clear" style="right: 0;"></div>
+		</div>
+		<div class="login_input">
+			<input style="width: 7.5rem;" v-model="passwd" v-bind:type="pwType" maxlength="22" placeholder="请输入6~22位密码" />
+			<div @click="showPwClick" v-bind:class="show_hide" style="right: 3.8rem;"></div>
+			<div @click="forgetPwClick" class="timer">忘记密码</div>
+		</div>
+		<div class="login_input">
+			<input v-model="inviteCodeSecond" type="text" placeholder="请输入邀请码（可选）"  style="width: 9rem" id="codeSecond"/>
+			<div  class="clear" style="right: 0;"></div>
+		</div>
+	</div>
+	<!-- 登录按钮 -->
+	<div @click="loginClick" v-bind:class="loginClass">登录</div>
+	<!-- 语音验证码 -->
+	<!--<div v-if="is_tel == true" class="login_yuyin">没收到短信？试试<span @click="yuyinClick" style="color: #1184FF;">电话语音验证码</span></div>-->
+</div>
+</body>
+<script>
 
-					window.location.href = 'home.html?refereeCode='+refereeCode+'&referee='+referee;
-					console.log(window.location.href)
-				},
-				// 注册
-				goRegestClick: function(){
-					window.location.href = 'regrest.html'
-				},
-				// 显示 还是隐藏密码
-				showPwClick: function(){
-					// 显示密码
-					if (this.show_hide == 'clear hide_pw') {
-						this.show_hide = 'clear show_pw';
-						this.pwType = 'text';
-					} else{ // 隐藏密码
-						this.show_hide = 'clear hide_pw';
-						this.pwType = 'password';
-					}
-				},
-				// 发送验证码 按钮点击事件
-				sendYzmClick: function(){
-					var self = this;
-					if (self.yzmTime != '发送验证码') {
-						return;
-					}
-					if (Util.checkPhone(this.telVal)) {
-						var urlStr = Util.baseUrl + '/DuG/api/basics/validateCode/findValidateCode.do';
-						var md5Str = Util.basekey + this.telVal + '2';
-						$.ajax({
-							type:"get",
-							url: urlStr,
-							async:true,
-							timeout: 10000,
-							data: {
-								phone: this.telVal,
-								sourceType: 2,
-								key: Util.basekey,
-								auth: Util.base32Encode('key,phone,sourceType'),
-								token: md5(md5Str)
-							},
-							success: function(res){
-								var res = JSON.parse(res);
-								// 发送成功
-								if (res.ret_code == '0') {
-									$.toast("验证码发送成功");
-									self.yzmTime = 60;
-								    var timer = setInterval(function(){
-										self.yzmTime =  self.yzmTime - 1;
-										self.yzmTime2 = self.yzmTime + '(s)'
-										self.yzmColor = '#7A7A7A';
-										if (self.yzmTime == 0) {
-											clearInterval(timer);
-											self.yzmTime = '发送验证码';
-											self.yzmTime2 = '发送验证码';
-											self.yzmColor = '#1184FF"';
-										}
-									},1000);
-								} else{
-									$.toast(res.ret_msg);
-								}
-							},
-							error: function(res){
-								$.toast('网路请求失败，请稍后重试');
-							}
-						});
-					} else{
-						$.toast("手机号输入有误");
-					}
-				},
-				// 忘记密码按钮点击事件
-				forgetPwClick: function(){
-					window.location.href = 'forgetpasswd.html'
-				},
-				// 登录按钮点击事件
-				loginClick: function(){
-					// 快捷登录
-					if (this.is_tel == true) {
-						var referee = localStorage.getItem('referee') || "";
-						
-						if (this.isActive1() == true) {
-							var urlStr = Util.baseUrl + '/DuG/api/user/user/loginAndNew.do';
-							var md5Str = Util.basekey + referee + this.telVal + '2' + '1' + this.yzmVal;
-							$.ajax({
-								type:"get",
-								url: urlStr,
-								async:true,
-								data: {
-									referee:referee,
-									phone: this.telVal,
-									sourceType: 2,
-									type: 1,
-									passWord: this.yzmVal,
-									key: Util.basekey,
-									auth: Util.base32Encode('key,referee,phone,sourceType,type,passWord'),
-									token: md5(md5Str)
-								},
-								success: function(res){
-									var res = JSON.parse(res);
-									var self = this;
-									// 登录成功
-									if (res.ret_code == '0') {
-										localStorage.setItem('userId',res.ret_data.userId || '');
-										localStorage.setItem('userPhone',res.ret_data.userPhone || '');
-                                        localStorage.setItem('refereeCode',$("#codeFirst").val());
-										window.location.replace('wode.html');
-									} else{
-										$.toast(res.ret_msg);
-									}
-								},
-								error: function(res){
-									$.toast('网路请求失败，请稍后重试');
-								}
-							});
-						}
-					} else{ // 账号密码登录
-						if (this.isActive2() == true) {
-							var urlStr = Util.baseUrl + '/DuG/api/user/user/loginAndNew.do';
-							var md5Str = Util.basekey + this.zhanghao + '2' + '2' + md5(this.passwd);
-							$.ajax({
-								type:"get",
-								url: urlStr,
-								async:true,
-								data: {
-									phone: this.zhanghao,
-									sourceType: 2,
-									type: 2,
-									passWord: md5(this.passwd),
-									key: Util.basekey,
-									auth: Util.base32Encode('key,phone,sourceType,type,passWord'),
-									token: md5(md5Str)
-								},
-								success: function(res){
-									var res = JSON.parse(res);
-									// 登录成功
-									if (res.ret_code == '0') {
-										localStorage.setItem('userId',res.ret_data.userId || '');
-										localStorage.setItem('userPhone',res.ret_data.userPhone || '');
-										localStorage.setItem('refereeCode',$("#codeSecond").val());
-										window.location.replace('wode.html');
-									} else{
-										$.toast(res.ret_msg);
-									}
-								},
-								error: function(res){
-									$.toast('网路请求失败，请稍后重试');
-								}
-							});	
-						}
-					}
-				},
-				// 语音验证码点击事件
-				yuyinClick: function(){
-					
-				},
-				// 是否激活登录按钮
-				isActive1: function(){
-					if (this.telVal.length == 11 && this.yzmVal.length > 0) {
-						this.loginClass = 'login_btn_active';
-						return true;
-					} else{
-						this.loginClass = 'login_btn';
-						return false;
-					}	
-				},
-				// 是否激活登录按钮
-				isActive2: function(){
-					if (this.zhanghao.length > 0 && this.passwd.length > 0) {
-						this.loginClass = 'login_btn_active';
-						return true;
-					} else{
-						this.loginClass = 'login_btn';
-						return false;
-					}	
-				},
-			},
-		})
-	</script>
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]); return null;
+    }
+
+    $(function(){
+        if(getQueryString('referee') != null && getQueryString('referee') != ""){
+            localStorage.setItem('referee',getQueryString('referee'));
+        }
+    });
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            is_tel: true,
+            show_hide: 'clear hide_pw',
+            pwType: 'password',
+            // 用户输入的手机号
+            telVal: '',
+            //快速登录时的邀请码
+            inviteCodeFirst:"",
+            //密码登录时的邀请码
+            inviteCodeSecond:"",
+            // 验证码
+            yzmVal: '',
+            // 显示手机号删除按钮
+            showTelClear: false,
+            // 显示验证码删除按钮
+            showYzmClear: false,
+            // 账号
+            zhanghao: '',
+            // 密码
+            passwd: '',
+            // 显示账号删除图标
+            showZhanghaoClear: false,
+            // 验证码计时
+            yzmTime: '发送验证码',
+            yzmTime2: '发送验证码',
+            // 登录按钮样式
+            loginClass: 'login_btn',
+            yzmColor: '#1184FF',
+        },
+        watch: {
+            // 快捷登录   账号密码登录  切换
+            is_tel: function(val,oldVal){
+                if (val == true) { // 快捷登录
+                    $('#kuaijie').css('color','#FF2E03');
+                    $('#zhanghao').css('color','#7A7A7A');
+                    this.isActive1();
+                } else{ // 账号密码登录
+                    $('#kuaijie').css('color','#7A7A7A');
+                    $('#zhanghao').css('color','#FF2E03');
+                    this.isActive2();
+                }
+            },
+            // 手机号值改变事件
+            telVal: function(val,oldVal){
+                if (val.length ==0) {
+                    this.showTelClear = false;
+                } else{
+                    this.showTelClear = true;
+                }
+                this.isActive1();
+            },
+            // 验证码值改变事件
+            yzmVal: function(val,oldVal){
+                if (val.length ==0) {
+                    this.showYzmClear = false;
+                } else{
+                    this.showYzmClear = true;
+                }
+                this.isActive1();
+            },
+            // 账号值改变事件
+            zhanghao: function(val,oldVal){
+                if (val.length ==0) {
+                    this.showZhanghaoClear = false;
+                } else{
+                    this.showZhanghaoClear = true;
+                }
+                this.isActive2();
+            },
+            passwd: function(val,oldVal){
+                this.isActive2();
+            },
+        },
+        mounted: function() {
+            this.isLogin();
+        },
+        methods: {
+            isLogin: function(){
+                var userId = localStorage.getItem('userId') || '';
+                if (userId != '') {
+                    //window.location.href = 'home.html';
+                }
+            },
+            // 返回首页
+            goHomeClick: function(){
+//					window.location.replace('home.html');
+                //refereeCode推荐码  referee渠道ID
+                var refereeCode = "";
+                if(localStorage.getItem("refereeCode")){
+                    refereeCode = localStorage.getItem("refereeCode");
+                }
+                var referee = "";
+                if(localStorage.getItem('referee')){
+                    referee = localStorage.getItem('referee');
+                }
+
+                window.location.href = 'home.html?refereeCode='+refereeCode+'&referee='+referee;
+            },
+            // 注册
+            goRegestClick: function(){
+                window.location.href = 'regrest.html'
+            },
+            // 显示 还是隐藏密码
+            showPwClick: function(){
+                // 显示密码
+                if (this.show_hide == 'clear hide_pw') {
+                    this.show_hide = 'clear show_pw';
+                    this.pwType = 'text';
+                } else{ // 隐藏密码
+                    this.show_hide = 'clear hide_pw';
+                    this.pwType = 'password';
+                }
+            },
+            // 发送验证码 按钮点击事件
+            sendYzmClick: function(){
+                var self = this;
+                if (self.yzmTime != '发送验证码') {
+                    return;
+                }
+                if (Util.checkPhone(this.telVal)) {
+                    var urlStr = Util.baseUrl + '/DuG/api/basics/validateCode/findValidateCode.do';
+                    var md5Str = Util.basekey + this.telVal + '2';
+                    $.ajax({
+                        type:"get",
+                        url: urlStr,
+                        async:true,
+                        timeout: 10000,
+                        data: {
+                            phone: this.telVal,
+                            sourceType: 2,
+                            key: Util.basekey,
+                            auth: Util.base32Encode('key,phone,sourceType'),
+                            token: md5(md5Str)
+                        },
+                        success: function(res){
+                            var res = JSON.parse(res);
+                            // 发送成功
+                            if (res.ret_code == '0') {
+                                $.toast("验证码发送成功");
+                                self.yzmTime = 60;
+                                var timer = setInterval(function(){
+                                    self.yzmTime =  self.yzmTime - 1;
+                                    self.yzmTime2 = self.yzmTime + '(s)'
+                                    self.yzmColor = '#7A7A7A';
+                                    if (self.yzmTime == 0) {
+                                        clearInterval(timer);
+                                        self.yzmTime = '发送验证码';
+                                        self.yzmTime2 = '发送验证码';
+                                        self.yzmColor = '#1184FF"';
+                                    }
+                                },1000);
+                            } else{
+                                $.toast(res.ret_msg);
+                            }
+                        },
+                        error: function(res){
+                            $.toast('网路请求失败，请稍后重试');
+                        }
+                    });
+                } else{
+                    $.toast("手机号输入有误");
+                }
+            },
+            // 忘记密码按钮点击事件
+            forgetPwClick: function(){
+                window.location.href = 'forgetpasswd.html'
+            },
+            // 登录按钮点击事件
+            loginClick: function(){
+                // 快捷登录
+                if (this.is_tel == true) {
+                    var referee = localStorage.getItem('referee') || "";
+
+                    if (this.isActive1() == true) {
+                        var refereeCode = $("#codeFirst").val();
+                        var urlStr = Util.baseUrl + '/DuG/api/user/user/loginAndNew.do';
+                        var md5Str = Util.basekey + referee + this.telVal + '2' + '1' + this.yzmVal;
+                        $.ajax({
+                            type:"get",
+                            url: urlStr,
+                            async:true,
+                            data: {
+                                referee:referee,
+                                phone: this.telVal,
+                                sourceType: 2,
+                                type: 1,
+                                passWord: this.yzmVal,
+                                key: Util.basekey,
+                                refereeCode:refereeCode,
+                                auth: Util.base32Encode('key,referee,phone,sourceType,type,passWord,refereeCode'),
+                                token: md5(md5Str)
+                            },
+                            success: function(res){
+                                var res = JSON.parse(res);
+                                var self = this;
+                                // 登录成功
+                                if (res.ret_code == '0') {
+                                    localStorage.setItem('userId',res.ret_data.userId || '');
+                                    localStorage.setItem('userPhone',res.ret_data.userPhone || '');
+                                    localStorage.setItem('refereeCode',$("#codeFirst").val());
+                                    window.location.replace('wode.html');
+                                } else{
+                                    $.toast(res.ret_msg);
+                                }
+                            },
+                            error: function(res){
+                                $.toast('网路请求失败，请稍后重试');
+                            }
+                        });
+                    }
+                } else{ // 账号密码登录
+                    if (this.isActive2() == true) {
+                        var refereeCode = $("#codeSecond").val();
+                        var urlStr = Util.baseUrl + '/DuG/api/user/user/loginAndNew.do';
+                        var md5Str = Util.basekey + this.zhanghao + '2' + '2' + md5(this.passwd);
+                        $.ajax({
+                            type:"get",
+                            url: urlStr,
+                            async:true,
+                            data: {
+                                phone: this.zhanghao,
+                                sourceType: 2,
+                                type: 2,
+                                passWord: md5(this.passwd),
+                                key: Util.basekey,
+                                refereeCode:refereeCode,
+                                auth: Util.base32Encode('key,phone,sourceType,type,passWord,refereeCode'),
+                                token: md5(md5Str)
+                            },
+                            success: function(res){
+                                console.log(res)
+                                var res = JSON.parse(res);
+
+                                // 登录成功
+                                if (res.ret_code == '0') {
+                                    localStorage.setItem('userId',res.ret_data.userId || '');
+                                    localStorage.setItem('userPhone',res.ret_data.userPhone || '');
+                                    localStorage.setItem('refereeCode',$("#codeSecond").val());
+                                    window.location.replace('wode.html');
+                                } else{
+                                    $.toast(res.ret_msg);
+                                }
+                            },
+                            error: function(res){
+                                $.toast('网路请求失败，请稍后重试');
+                            }
+                        });
+                    }
+                }
+            },
+            // 语音验证码点击事件
+            yuyinClick: function(){
+
+            },
+            // 是否激活登录按钮
+            isActive1: function(){
+                if (this.telVal.length == 11 && this.yzmVal.length > 0) {
+                    this.loginClass = 'login_btn_active';
+                    return true;
+                } else{
+                    this.loginClass = 'login_btn';
+                    return false;
+                }
+            },
+            // 是否激活登录按钮
+            isActive2: function(){
+                if (this.zhanghao.length > 0 && this.passwd.length > 0) {
+                    this.loginClass = 'login_btn_active';
+                    return true;
+                } else{
+                    this.loginClass = 'login_btn';
+                    return false;
+                }
+            },
+        },
+    })
+</script>
 </html>
